@@ -1,0 +1,274 @@
+Business Requirements Document (BRD)
+Project Name: YouBBle Records Website
+ Prepared For: YouBBle Records
+ Prepared By: Dipen
+ Date: 08/21/2025
+
+1. Executive Summary
+YouBBle Records is launching a bold, edgy, music-industry-inspired website that will serve as the central hub for its brand identity, programs, artist collaborations, and merchandising.
+The platform will not only highlight the label’s music releases and social impact projects but also provide interactive engagement points for artists (demo submissions, collaborations) and fans (merch purchases, streaming links, podcast listening, event updates).
+This document outlines the business requirements, design standards, functional needs, and success metrics for the project.
+
+2. Business Objectives
+The primary business objectives of the website are:
+Brand Representation – Establish a modern, sleek, and edgy digital identity aligned with the music industry aesthetic.
+
+
+Engagement – Offer fans, collaborators, and artists a place to connect, discover, and interact with YouBBle Records.
+
+
+Monetization – Drive revenue streams through merch sales and service/kits purchases.
+
+
+Collaboration & Discovery – Provide a platform for new talent to submit demos and engage with the label.
+
+
+Social Responsibility – Showcase social impact initiatives and provide accessible resources (like the APK Kit download).
+
+
+Community Building – Integrate podcasts, events, and projects to keep fans and artists continuously engaged.
+
+
+
+3. Scope
+In Scope
+Development of a responsive, modern website with interactive elements.
+
+
+Integration of merchandising capabilities (basic e-commerce with product catalog, pricing, and checkout).
+
+
+Implementation of forms for program applications, demo submissions, and collaborations.
+
+
+Streaming integration for previews (Spotify/Apple embeds).
+
+
+Support for motion-based UI elements (scrolling banners, spinning logo, carousels).
+
+
+Social media and event calendar integration.
+
+
+Out of Scope
+Large-scale ticket booking system (handled externally).
+
+
+Advanced warehousing or fulfillment solutions for merch (will start with limited SKUs).
+
+
+Full-fledged music streaming platform (site will redirect users to Spotify, Apple, etc.).
+
+
+
+4. Stakeholders
+Project Sponsor: YouBBle Records Management – oversees direction, approvals, and budget.
+
+
+Product Owner: Digital Marketing/Brand Lead – responsible for defining content priorities and maintaining alignment with brand.
+
+
+Design Team: UI/UX designers (Figma mockups, style system).
+
+
+Development Team: Frontend and backend developers.
+
+
+Marketing Team: Content creators, social media, podcast management.
+
+
+End Users: Fans, Artists, Collaborators, General Visitors.
+
+
+
+5. User Personas
+Fans & Listeners – Want quick access to music releases, upcoming shows, merch, and podcasts.
+
+
+Artists – Looking for demo submission opportunities and collaboration with the label.
+
+
+Collaborators/Partners – Seek information on projects and ways to engage with YouBBle Records.
+
+
+General Visitors – Want to learn about YouBBle Records, its story, and mission.
+
+
+
+6. User Flow
+The website will have a central navigation system (sticky navbar) ensuring users can easily move between sections.
+Landing Page → Home (entry point with animation + tagline).
+
+
+Home → Programs / Releases / Merch (quick highlights with banners and carousels).
+
+
+Deep Pages → Projects, Kits, Demo Submission, Podcasts, About, Contact.
+
+
+Persistent Footer → Socials, Quick Links.
+
+
+The design ensures minimal clicks from entry to key actions like purchasing merch, submitting a demo, or discovering new music.
+
+7. Functional Requirements
+7.1 Landing Page
+Spinning logo with deep yellow glow on black background.
+
+
+Enter button transitions into homepage.
+
+
+Central tagline showcasing brand identity.
+
+
+7.2 Home Page
+Sticky navigation bar with hover effects.
+
+
+Horizontal scrolling banner for Programs.
+
+
+Carousel of upcoming releases (albums, singles, artists).
+
+
+Merch highlight with product scroll.
+
+
+Footer with social icons + quick links.
+
+
+7.3 About Page
+Story of YouBBle Records (mission, values, brand story).
+
+
+Collaborate With Us section (CTA + form).
+
+
+7.4 Releases Page
+Grid layout of music releases.
+
+
+On hover: play preview button + streaming links.
+
+
+7.5 Projects Page
+Highlight ongoing projects (Playlist, Merch Store, Contact, Pricing).
+
+
+Each project represented as a visual card with CTA buttons.
+
+
+7.6 Social Impact Kit Page
+Sections: Learnings, Trainings, Garagestar kit, Social Projects.
+
+
+Downloadable APK via yellow CTA button.
+
+
+7.7 Demo Page
+Upload form (audio files: mp3, wav, stems).
+
+
+Artist details form.
+
+
+Guidelines block (file types, max size).
+
+
+7.8 Services / Kits Page
+Pricing cards with tiered offerings (Starter Kit, Serious Business Kit).
+
+
+Black background, yellow CTA buttons.
+
+
+Hover effects for interactivity.
+
+
+7.9 Podcasts & Shows Page
+Embedded podcast player.
+
+
+Upcoming shows with Add-to-Calendar option.
+
+
+
+8. Non-Functional Requirements
+Performance: Pages must load within 3 seconds on average broadband.
+
+
+Responsiveness: Fully optimized for desktop, tablet, and mobile.
+
+
+Accessibility: WCAG 2.1 compliant with high contrast, keyboard navigation, alt text.
+
+
+Security: HTTPS/SSL, secure file upload, CAPTCHA on forms.
+
+
+Scalability: Site should support addition of more merch items, projects, or integrations.
+
+
+SEO Optimized: Metadata, structured data, keywords included for discoverability.
+
+
+
+9. Design Guidelines
+Colors: Black (background), Deep Yellow (CTA/highlights), White/Gray (text).
+
+
+Typography:
+
+
+Headings: Montserrat/Oswald Bold.
+
+
+Body: Inter/Roboto Regular.
+
+
+Layout: Grid system, rounded cards, consistent padding and spacing.
+
+
+Effects: Motion animations (logo spin, scroll banners, carousels, hover glow).
+
+
+Tone: Edgy, bold, modern — consistent with music-industry culture.
+
+
+
+10. Risks & Dependencies
+Risk: Large/malicious file uploads.
+
+
+Mitigation: Restrict file size/type, virus scan.
+
+
+Risk: Merch demand outgrows basic store capabilities.
+
+
+Mitigation: Use Shopify/Stripe as scalable backend.
+
+
+Dependency: Streaming integrations (Spotify, Apple).
+
+
+
+11. Success Metrics
+Website traffic growth (visitors, session duration, bounce rate).
+
+
+Demo submissions per month.
+
+
+Merch sales conversion rate.
+
+
+Number of collaborations initiated through forms.
+
+
+Podcast streams & show RSVPs.
+
+
+Social media engagement from site referrals.
+
