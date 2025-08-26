@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Oswald:wght@400;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 10%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --primary: hsl(51, 100%, 50%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(0, 0%, 90%);
+  --muted: hsl(0, 0%, 20%);
+  --muted-foreground: hsl(0, 0%, 70%);
+  --accent: hsl(51, 100%, 50%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(0, 0%, 25%);
+  --input: hsl(0, 0%, 15%);
+  --ring: hsl(51, 100%, 50%);
+  --chart-1: hsl(51, 100%, 50%);
+  --chart-2: hsl(159, 100%, 36%);
+  --chart-3: hsl(42, 93%, 56%);
+  --chart-4: hsl(147, 79%, 42%);
+  --chart-5: hsl(341, 75%, 51%);
+  --sidebar: hsl(0, 0%, 10%);
+  --sidebar-foreground: hsl(0, 0%, 95%);
+  --sidebar-primary: hsl(51, 100%, 50%);
+  --sidebar-primary-foreground: hsl(0, 0%, 0%);
+  --sidebar-accent: hsl(0, 0%, 15%);
+  --sidebar-accent-foreground: hsl(51, 100%, 50%);
+  --sidebar-border: hsl(0, 0%, 25%);
+  --sidebar-ring: hsl(51, 100%, 50%);
+  --font-sans: "Inter", sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --font-heading: "Montserrat", sans-serif;
+  --font-accent: "Oswald", sans-serif;
+  --radius: 12px;
+  --shadow-2xs: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00);
+  --shadow-xs: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00);
+  --shadow-sm: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00), 0px 1px 2px -1px hsl(51, 100%, 50%, 0.00);
+  --shadow: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00), 0px 1px 2px -1px hsl(51, 100%, 50%, 0.00);
+  --shadow-md: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00), 0px 2px 4px -1px hsl(51, 100%, 50%, 0.00);
+  --shadow-lg: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00), 0px 4px 6px -1px hsl(51, 100%, 50%, 0.00);
+  --shadow-xl: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00), 0px 8px 10px -1px hsl(51, 100%, 50%, 0.00);
+  --shadow-2xl: 0px 2px 0px 0px hsl(51, 100%, 50%, 0.00);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@keyframes glow {
+  from { 
+    box-shadow: 0 0 20px hsl(51, 100%, 50%), 0 0 40px hsl(51, 100%, 50%), 0 0 60px hsl(51, 100%, 50%); 
+  }
+  to { 
+    box-shadow: 0 0 30px hsl(51, 100%, 50%), 0 0 60px hsl(51, 100%, 50%), 0 0 90px hsl(51, 100%, 50%); 
+  }
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.landing-logo {
+  animation: spin-slow 8s linear infinite, glow 2s ease-in-out infinite alternate;
+}
+
+.scroll-banner {
+  animation: scroll 30s linear infinite;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px hsl(51, 100%, 50%, 0.5);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.navbar-blur {
+  backdrop-filter: blur(10px);
+  background: hsl(0, 0%, 0%, 0.8);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-accent {
+  font-family: var(--font-accent);
+}
