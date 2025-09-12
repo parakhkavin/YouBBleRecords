@@ -1,4 +1,4 @@
-import logoImage from "../assets/youbble-logo.png";
+import logoImage from "../assets/youbble-logo.jpg";
 
 export default function AnimatedLogo() {
   return (

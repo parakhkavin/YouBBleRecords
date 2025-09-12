@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Twitter, ExternalLink, Youtube } from "lucide-react";
-import logoImage from "../assets/youbble-logo.png";
+import logoImage from "../assets/youbble-logo.jpg";
 
 export default function Footer() {
   const quickLinks = [
