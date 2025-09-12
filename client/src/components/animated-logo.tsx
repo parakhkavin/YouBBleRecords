@@ -6,7 +6,7 @@ export default function AnimatedLogo() {
       <img 
         src={logoImage} 
         alt="YouBBle Records Logo" 
-        className="w-full h-full object-contain"
+        className="w-full h-full object-cover rounded-full"
       />
     </div>
   );

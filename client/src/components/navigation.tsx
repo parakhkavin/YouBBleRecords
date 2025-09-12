@@ -30,7 +30,7 @@ export default function Navigation() {
               <img 
                 src={logoImage} 
                 alt="YouBBle Records Logo" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover rounded-full"
               />
             </div>
             <span className="font-heading font-bold text-xl">YouBBle</span>
