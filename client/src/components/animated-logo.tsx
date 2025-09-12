@@ -1,9 +1,13 @@
-import { Music } from "lucide-react";
+import logoImage from "../assets/youbble-logo.png";
 
 export default function AnimatedLogo() {
   return (
-    <div className="w-32 h-32 mx-auto landing-logo bg-accent rounded-full flex items-center justify-center">
-      <Music className="w-12 h-12 text-accent-foreground" />
+    <div className="w-32 h-32 mx-auto landing-logo flex items-center justify-center">
+      <img 
+        src={logoImage} 
+        alt="YouBBle Records Logo" 
+        className="w-full h-full object-contain"
+      />
     </div>
   );
 }

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Music } from "lucide-react";
+import { Menu } from "lucide-react";
+import logoImage from "../assets/youbble-logo.png";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -25,8 +26,12 @@ export default function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           <Link href="/home" className="flex items-center space-x-3" data-testid="link-home-logo">
-            <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-              <Music className="w-6 h-6 text-accent-foreground" />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img 
+                src={logoImage} 
+                alt="YouBBle Records Logo" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="font-heading font-bold text-xl">YouBBle</span>
           </Link>

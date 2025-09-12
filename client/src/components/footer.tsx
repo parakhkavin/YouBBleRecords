@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { Music, Instagram, Twitter, ExternalLink, Youtube } from "lucide-react";
+import { Instagram, Twitter, ExternalLink, Youtube } from "lucide-react";
+import logoImage from "../assets/youbble-logo.png";
 
 export default function Footer() {
   const quickLinks = [
@@ -29,8 +30,12 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-                <Music className="w-6 h-6 text-accent-foreground" />
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img 
+                  src={logoImage} 
+                  alt="YouBBle Records Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="font-heading font-bold text-xl">YouBBle Records</span>
             </div>
