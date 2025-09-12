@@ -13,15 +13,15 @@ export default function Footer() {
   const communityLinks = [
     { href: "/projects", label: "Projects" },
     { href: "/podcasts", label: "Podcasts" },
-    { href: "#", label: "Events" },
-    { href: "#", label: "Merch Store" },
+    { href: "/events", label: "Events" },
+    { href: "/merch", label: "Merch Store" },
   ];
 
   const socialLinks = [
-    { href: "#", icon: <Instagram className="w-5 h-5" />, label: "Instagram" },
-    { href: "#", icon: <Twitter className="w-5 h-5" />, label: "Twitter" },
-    { href: "#", icon: <ExternalLink className="w-5 h-5" />, label: "Spotify" },
-    { href: "#", icon: <Youtube className="w-5 h-5" />, label: "YouTube" },
+    { href: "https://instagram.com/youbblerecords", icon: <Instagram className="w-5 h-5" />, label: "Instagram" },
+    { href: "https://twitter.com/youbblerecords", icon: <Twitter className="w-5 h-5" />, label: "Twitter" },
+    { href: "https://open.spotify.com/artist/youbblerecords", icon: <ExternalLink className="w-5 h-5" />, label: "Spotify" },
+    { href: "https://youtube.com/@youbblerecords", icon: <Youtube className="w-5 h-5" />, label: "YouTube" },
   ];
 
   return (

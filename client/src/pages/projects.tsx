@@ -1,38 +1,40 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLocation } from "wouter";
-import { ListMusic, Store, Mail, Tag, Check, Download } from "lucide-react";
+import { Check, Download } from "lucide-react";
+import playlistIcon from "../assets/project-playlist.png";
+import storeIcon from "../assets/project-store.png";
 
 export default function ProjectsPage() {
   const [, setLocation] = useLocation();
 
   const projectsData = [
     {
-      icon: <ListMusic className="w-8 h-8" />,
+      icon: <img src={playlistIcon} alt="Playlist" className="w-8 h-8" />,
       title: "Curated Playlists",
       description: "Monthly curated playlists featuring our artists and underground gems we're passionate about.",
       buttonText: "Listen Now",
       action: () => window.open("#", "_blank"),
     },
     {
-      icon: <Store className="w-8 h-8" />,
-      title: "Merch Store",
+      icon: <img src={storeIcon} alt="Store" className="w-8 h-8" />,
+      title: "Merch Store", 
       description: "Exclusive artist merchandise and YouBBle Records branded items designed by our creative community.",
       buttonText: "Shop Now",
       action: () => setLocation("/merch"),
     },
     {
-      icon: <Mail className="w-8 h-8" />,
+      icon: <img src={storeIcon} alt="Contact" className="w-8 h-8" />,
       title: "Direct Contact",
       description: "Get in touch for collaborations, booking inquiries, or partnership opportunities.",
       buttonText: "Contact Us",
       action: () => setLocation("/about"),
     },
     {
-      icon: <Tag className="w-8 h-8" />,
+      icon: <img src={playlistIcon} alt="Pricing" className="w-8 h-8" />,
       title: "Service Pricing",
       description: "Transparent pricing for our production, marketing, and artist development services.",
-      buttonText: "View Pricing",
+      buttonText: "View Pricing", 
       action: () => setLocation("/services"),
     },
   ];

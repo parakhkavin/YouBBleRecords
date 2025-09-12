@@ -19,7 +19,7 @@ export default function LandingPage() {
           You<span className="text-accent">BB</span>le Records
         </h1>
         <p className="text-muted-foreground text-xl mb-8 font-accent">
-          BOLD MUSIC • BOLD IMPACT
+          UNLEASH THE BEAT, JOIN THE MOVEMENT
         </p>
         <Button 
           onClick={enterSite}

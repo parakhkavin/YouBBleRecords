@@ -41,13 +41,15 @@ export default function HomePage() {
     },
   ];
 
-  const getMerchIcon = (category: string) => {
-    switch (category) {
-      case "apparel": return "👕";
-      case "music": return "💿";
-      case "accessories": return "☕";
-      default: return "🛍️";
-    }
+  const getMerchIcon = (category: string, item: MerchItem) => {
+    // Use the actual product image instead of emoji
+    return (
+      <img 
+        src={item.image} 
+        alt={item.name}
+        className="w-full h-full object-cover rounded-lg"
+      />
+    );
   };
 
   return (
@@ -65,8 +67,8 @@ export default function HomePage() {
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <h1 className="font-heading font-black text-6xl md:text-8xl mb-6">
-            REDEFINING 
-            <span className="text-accent block">MUSIC</span>
+            UNLEASH THE BEAT,
+            <span className="text-accent block">JOIN THE MOVEMENT</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Where underground meets mainstream. Where artists become legends. Where music creates impact.
@@ -155,10 +157,10 @@ export default function HomePage() {
                         Preview
                       </Button>
                       <div className="flex space-x-2">
-                        <a href={release.spotifyUrl} className="text-accent hover:text-accent/80" data-testid={`link-spotify-${release.id}`}>
+                        <a href={release.spotifyUrl || "#"} className="text-accent hover:text-accent/80" data-testid={`link-spotify-${release.id}`}>
                           <ExternalLink className="w-5 h-5" />
                         </a>
-                        <a href={release.appleUrl} className="text-accent hover:text-accent/80" data-testid={`link-apple-${release.id}`}>
+                        <a href={release.appleUrl || "#"} className="text-accent hover:text-accent/80" data-testid={`link-apple-${release.id}`}>
                           <ExternalLink className="w-5 h-5" />
                         </a>
                       </div>
@@ -199,8 +201,8 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {merchItems?.map((item) => (
                 <Card key={item.id} className="bg-secondary p-6 hover-glow" data-testid={`card-merch-${item.id}`}>
-                  <div className="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-3xl">{getMerchIcon(item.category)}</span>
+                  <div className="w-full h-32 rounded-lg mb-4 overflow-hidden">
+                    {getMerchIcon(item.category, item)}
                   </div>
                   <h3 className="font-semibold mb-2">{item.name}</h3>
                   <p className="text-accent font-bold">{item.price}</p>
