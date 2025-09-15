@@ -1,0 +1,1271 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouBBle Records - Bold Music, Bold Impact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "sans-serif"],
+                    heading: ["Montserrat", "sans-serif"],
+                    accent: ["Oswald", "sans-serif"],
+                },
+                animation: {
+                    'spin-slow': 'spin 8s linear infinite',
+                    'glow': 'glow 2s ease-in-out infinite alternate',
+                    'scroll': 'scroll 30s linear infinite',
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Oswald:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --background: hsl(0 0% 0%);
+            --foreground: hsl(0 0% 100%);
+            --card: hsl(0 0% 10%);
+            --card-foreground: hsl(0 0% 95%);
+            --primary: hsl(51 100% 50%);
+            --primary-foreground: hsl(0 0% 0%);
+            --secondary: hsl(0 0% 15%);
+            --secondary-foreground: hsl(0 0% 90%);
+            --muted: hsl(0 0% 20%);
+            --muted-foreground: hsl(0 0% 70%);
+            --accent: hsl(51 100% 50%);
+            --accent-foreground: hsl(0 0% 0%);
+            --destructive: hsl(0 84% 60%);
+            --destructive-foreground: hsl(0 0% 98%);
+            --border: hsl(0 0% 25%);
+            --input: hsl(0 0% 15%);
+            --ring: hsl(51 100% 50%);
+            --radius: 12px;
+        }
+
+        * {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px hsl(51 100% 50%), 0 0 40px hsl(51 100% 50%), 0 0 60px hsl(51 100% 50%); }
+            to { box-shadow: 0 0 30px hsl(51 100% 50%), 0 0 60px hsl(51 100% 50%), 0 0 90px hsl(51 100% 50%); }
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .landing-logo {
+            animation: spin 8s linear infinite, glow 2s ease-in-out infinite alternate;
+        }
+
+        .scroll-banner {
+            animation: scroll 30s linear infinite;
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 20px hsl(51 100% 50% / 0.5);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-blur {
+            backdrop-filter: blur(10px);
+            background: hsl(0 0% 0% / 0.8);
+        }
+
+        .hidden-page {
+            display: none;
+        }
+
+        .active-page {
+            display: block;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Landing Page -->
+    <div id="landing-page" class="min-h-screen flex items-center justify-center bg-background">
+        <div class="text-center">
+            <div class="landing-logo w-32 h-32 mx-auto mb-8 bg-accent rounded-full flex items-center justify-center">
+                <i class="fas fa-music text-4xl text-primary-foreground"></i>
+            </div>
+            <h1 class="font-heading font-black text-5xl md:text-7xl mb-4 text-foreground">
+                You<span class="text-accent">BB</span>le Records
+            </h1>
+            <p class="text-muted-foreground text-xl mb-8 font-accent">
+                BOLD MUSIC • BOLD IMPACT
+            </p>
+            <button onclick="enterSite()" class="bg-accent text-accent-foreground px-8 py-4 rounded-lg font-heading font-bold text-lg hover-glow transition-all duration-300">
+                ENTER THE EXPERIENCE
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Website -->
+    <div id="main-site" class="hidden-page">
+        <!-- Sticky Navigation -->
+        <nav class="fixed top-0 left-0 right-0 z-50 navbar-blur border-b border-border">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between py-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+                            <i class="fas fa-music text-accent-foreground"></i>
+                        </div>
+                        <span class="font-heading font-bold text-xl">YouBBle</span>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#" onclick="showPage('home')" class="nav-link text-foreground hover:text-accent transition-colors">Home</a>
+                        <a href="#" onclick="showPage('about')" class="nav-link text-foreground hover:text-accent transition-colors">About</a>
+                        <a href="#" onclick="showPage('releases')" class="nav-link text-foreground hover:text-accent transition-colors">Releases</a>
+                        <a href="#" onclick="showPage('projects')" class="nav-link text-foreground hover:text-accent transition-colors">Projects</a>
+                        <a href="#" onclick="showPage('demos')" class="nav-link text-foreground hover:text-accent transition-colors">Submit Demo</a>
+                        <a href="#" onclick="showPage('services')" class="nav-link text-foreground hover:text-accent transition-colors">Services</a>
+                        <a href="#" onclick="showPage('podcasts')" class="nav-link text-foreground hover:text-accent transition-colors">Podcasts</a>
+                    </div>
+
+                    <button class="md:hidden text-accent">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Home Page -->
+        <div id="home-page" class="page active-page pt-20">
+            <!-- Hero Section -->
+            <section class="relative min-h-screen flex items-center justify-center">
+                <!-- Modern recording studio with professional equipment and atmospheric lighting -->
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080');">
+                    <div class="absolute inset-0 bg-black/70"></div>
+                </div>
+                
+                <div class="relative z-10 text-center max-w-4xl mx-auto px-4">
+                    <h1 class="font-heading font-black text-6xl md:text-8xl mb-6">
+                        REDEFINING 
+                        <span class="text-accent block">MUSIC</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                        Where underground meets mainstream. Where artists become legends. Where music creates impact.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="showPage('releases')" class="bg-accent text-accent-foreground px-8 py-4 rounded-lg font-heading font-bold hover-glow">
+                            EXPLORE RELEASES
+                        </button>
+                        <button onclick="showPage('demos')" class="border-2 border-accent text-accent px-8 py-4 rounded-lg font-heading font-bold hover:bg-accent hover:text-accent-foreground transition-all">
+                            SUBMIT YOUR DEMO
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Programs Banner -->
+            <section class="py-16 bg-card border-t border-border overflow-hidden">
+                <div class="container mx-auto px-4 mb-8">
+                    <h2 class="font-heading font-bold text-3xl text-center">Our Programs</h2>
+                </div>
+                <div class="relative">
+                    <div class="flex space-x-6 scroll-banner">
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-microphone text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Artist Development</h3>
+                            <p class="text-muted-foreground">Comprehensive support for emerging artists to develop their sound and brand.</p>
+                        </div>
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-heart text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Social Impact</h3>
+                            <p class="text-muted-foreground">Music-driven initiatives for positive community change and social awareness.</p>
+                        </div>
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-users text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Collaboration Hub</h3>
+                            <p class="text-muted-foreground">Connect artists, producers, and industry professionals for creative partnerships.</p>
+                        </div>
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-graduation-cap text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Music Education</h3>
+                            <p class="text-muted-foreground">Workshops and resources for music production, business, and creative development.</p>
+                        </div>
+                        <!-- Duplicate for seamless scroll -->
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-microphone text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Artist Development</h3>
+                            <p class="text-muted-foreground">Comprehensive support for emerging artists to develop their sound and brand.</p>
+                        </div>
+                        <div class="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow">
+                            <i class="fas fa-heart text-accent text-3xl mb-4"></i>
+                            <h3 class="font-heading font-bold text-xl mb-2">Social Impact</h3>
+                            <p class="text-muted-foreground">Music-driven initiatives for positive community change and social awareness.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latest Releases Carousel -->
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="font-heading font-bold text-3xl">Latest Releases</h2>
+                        <button onclick="showPage('releases')" class="text-accent hover:text-accent/80 font-semibold">View All →</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Vinyl records collection with warm studio lighting -->
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400" alt="Album cover" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Midnight Frequencies</h3>
+                                <p class="text-muted-foreground mb-4" data-bind="release.artist">Artist: NEON PULSE</p>
+                                <div class="flex items-center space-x-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-spotify"></i>
+                                    </a>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-apple"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Vintage analog synthesizer with colorful LED displays -->
+                            <img src="https://pixabay.com/get/g70a81b4e62bbc5ee0fd1c04bd2dad27b44652ebdd212f4d66d8ab185d87dcb307784c269ca2490cda9d041a4e724fbd15e905b4b5be7888165401c8c6fb2cfaf_1280.jpg" alt="Album cover" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Electric Dreams</h3>
+                                <p class="text-muted-foreground mb-4" data-bind="release.artist">Artist: SYNTH WAVES</p>
+                                <div class="flex items-center space-x-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-spotify"></i>
+                                    </a>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-apple"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Professional mixing console in modern recording studio -->
+                            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400" alt="Album cover" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Urban Echoes</h3>
+                                <p class="text-muted-foreground mb-4" data-bind="release.artist">Artist: METRO SOUND</p>
+                                <div class="flex items-center space-x-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-spotify"></i>
+                                    </a>
+                                    <a href="#" class="text-accent hover:text-accent/80">
+                                        <i class="fab fa-apple"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Merchandise Highlight -->
+            <section class="py-16 bg-card">
+                <div class="container mx-auto px-4">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="font-heading font-bold text-3xl">Exclusive Merch</h2>
+                        <button onclick="showPage('merch')" class="text-accent hover:text-accent/80 font-semibold">Shop All →</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                            <div class="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
+                                <i class="fas fa-tshirt text-accent text-3xl"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2" data-bind="product.name">YouBBle Tee</h3>
+                            <p class="text-accent font-bold" data-bind="product.price">$29.99</p>
+                        </div>
+                        <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                            <div class="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
+                                <i class="fas fa-hat-cowboy text-accent text-3xl"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2" data-bind="product.name">Signature Cap</h3>
+                            <p class="text-accent font-bold" data-bind="product.price">$24.99</p>
+                        </div>
+                        <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                            <div class="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
+                                <i class="fas fa-compact-disc text-accent text-3xl"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2" data-bind="product.name">Vinyl Collection</h3>
+                            <p class="text-accent font-bold" data-bind="product.price">$39.99</p>
+                        </div>
+                        <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                            <div class="w-full h-32 bg-muted rounded-lg mb-4 flex items-center justify-center">
+                                <i class="fas fa-coffee text-accent text-3xl"></i>
+                            </div>
+                            <h3 class="font-semibold mb-2" data-bind="product.name">Studio Mug</h3>
+                            <p class="text-accent font-bold" data-bind="product.price">$19.99</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="about-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4 max-w-4xl">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-8 text-center">
+                        Our <span class="text-accent">Story</span>
+                    </h1>
+                    
+                    <div class="prose prose-invert max-w-none mb-12">
+                        <p class="text-xl text-muted-foreground text-center mb-8">
+                            YouBBle Records was born from a vision to bridge the gap between underground authenticity and mainstream impact.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-8 mb-12">
+                            <div class="bg-card rounded-lg p-8">
+                                <h3 class="font-heading font-bold text-2xl mb-4 text-accent">Our Mission</h3>
+                                <p class="text-muted-foreground">
+                                    To empower artists with bold vision, creating music that not only entertains but transforms communities and drives social change.
+                                </p>
+                            </div>
+                            <div class="bg-card rounded-lg p-8">
+                                <h3 class="font-heading font-bold text-2xl mb-4 text-accent">Our Values</h3>
+                                <ul class="text-muted-foreground space-y-2">
+                                    <li>• Authentic artistic expression</li>
+                                    <li>• Community-driven impact</li>
+                                    <li>• Innovation in music business</li>
+                                    <li>• Supporting emerging talent</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collaborate Section -->
+                    <div class="bg-secondary rounded-xl p-8 md:p-12">
+                        <h2 class="font-heading font-bold text-3xl mb-6 text-center">Collaborate With Us</h2>
+                        <p class="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+                            Whether you're an artist, producer, or industry professional, we're always looking for creative partnerships that push boundaries.
+                        </p>
+                        
+                        <form class="max-w-lg mx-auto space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Name *</label>
+                                <input type="text" required class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Email *</label>
+                                <input type="email" required class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Collaboration Type</label>
+                                <select class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                    <option>Artist Partnership</option>
+                                    <option>Production Collaboration</option>
+                                    <option>Business Partnership</option>
+                                    <option>Social Impact Project</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Message *</label>
+                                <textarea required rows="4" class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all" placeholder="Tell us about your project or collaboration idea..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-accent text-accent-foreground py-3 rounded-lg font-heading font-bold hover-glow transition-all">
+                                Send Collaboration Request
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Releases Page -->
+        <div id="releases-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-12 text-center">
+                        Our <span class="text-accent">Releases</span>
+                    </h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- @MAP: releases.map(release => ( -->
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Collection of colorful vinyl records arranged artistically -->
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500" alt="Album artwork" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Midnight Frequencies</h3>
+                                <p class="text-muted-foreground mb-2" data-bind="release.artist">NEON PULSE</p>
+                                <p class="text-sm text-muted-foreground mb-4" data-bind="release.date">Released: March 2024</p>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold flex items-center">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-spotify"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-apple"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Electronic</span>
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Ambient</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Modern music production setup with multiple monitors and equipment -->
+                            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500" alt="Album artwork" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Urban Echoes</h3>
+                                <p class="text-muted-foreground mb-2" data-bind="release.artist">METRO SOUND</p>
+                                <p class="text-sm text-muted-foreground mb-4" data-bind="release.date">Released: February 2024</p>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold flex items-center">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-spotify"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-apple"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Hip-Hop</span>
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Urban</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-card rounded-lg overflow-hidden hover-glow group" data-mock="true">
+                            <!-- Professional microphone in recording booth with purple lighting -->
+                            <img src="https://pixabay.com/get/g63cef803d84adff6f41d2a499ecb6a094f75aa2800cad6e8782d68dc89d31b3dbc1829e91105d8bb9db77513ee496cfd3f136b614373cf35a1ce3bbe42f98a85_1280.jpg" alt="Album artwork" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <h3 class="font-heading font-bold text-xl mb-2" data-bind="release.title">Electric Dreams</h3>
+                                <p class="text-muted-foreground mb-2" data-bind="release.artist">SYNTH WAVES</p>
+                                <p class="text-sm text-muted-foreground mb-4" data-bind="release.date">Released: January 2024</p>
+                                <div class="flex items-center space-x-4 mb-4">
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-md text-sm font-semibold flex items-center">
+                                        <i class="fas fa-play mr-2"></i>Preview
+                                    </button>
+                                    <div class="flex space-x-2">
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-spotify"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-apple"></i>
+                                        </a>
+                                        <a href="#" class="text-accent hover:text-accent/80 text-xl">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Synthwave</span>
+                                    <span class="bg-secondary px-3 py-1 rounded-full text-xs">Electronic</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Projects Page -->
+        <div id="projects-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-12 text-center">
+                        Our <span class="text-accent">Projects</span>
+                    </h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                        <div class="bg-card rounded-xl p-8 hover-glow">
+                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-list-music text-accent-foreground text-2xl"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-2xl mb-4">Curated Playlists</h3>
+                            <p class="text-muted-foreground mb-6">
+                                Monthly curated playlists featuring our artists and underground gems we're passionate about.
+                            </p>
+                            <button class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow">
+                                Listen Now
+                            </button>
+                        </div>
+
+                        <div class="bg-card rounded-xl p-8 hover-glow">
+                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-store text-accent-foreground text-2xl"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-2xl mb-4">Merch Store</h3>
+                            <p class="text-muted-foreground mb-6">
+                                Exclusive artist merchandise and YouBBle Records branded items designed by our creative community.
+                            </p>
+                            <button onclick="showPage('merch')" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow">
+                                Shop Now
+                            </button>
+                        </div>
+
+                        <div class="bg-card rounded-xl p-8 hover-glow">
+                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-envelope text-accent-foreground text-2xl"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-2xl mb-4">Direct Contact</h3>
+                            <p class="text-muted-foreground mb-6">
+                                Get in touch for collaborations, booking inquiries, or partnership opportunities.
+                            </p>
+                            <button class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow">
+                                Contact Us
+                            </button>
+                        </div>
+
+                        <div class="bg-card rounded-xl p-8 hover-glow">
+                            <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-tag text-accent-foreground text-2xl"></i>
+                            </div>
+                            <h3 class="font-heading font-bold text-2xl mb-4">Service Pricing</h3>
+                            <p class="text-muted-foreground mb-6">
+                                Transparent pricing for our production, marketing, and artist development services.
+                            </p>
+                            <button onclick="showPage('services')" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow">
+                                View Pricing
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Social Impact Kit Section -->
+                    <div class="bg-secondary rounded-xl p-8 md:p-12">
+                        <h2 class="font-heading font-bold text-3xl mb-6 text-center">Social Impact Kit</h2>
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div>
+                                <h3 class="font-heading font-bold text-xl mb-4 text-accent">Empowering Communities Through Music</h3>
+                                <p class="text-muted-foreground mb-6">
+                                    Our comprehensive social impact toolkit includes educational resources, community programs, and direct action initiatives that use music as a catalyst for positive change.
+                                </p>
+                                <div class="space-y-4 mb-6">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-check-circle text-accent"></i>
+                                        <span>Educational music programs for underserved communities</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-check-circle text-accent"></i>
+                                        <span>Mental health awareness through music therapy</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-check-circle text-accent"></i>
+                                        <span>Environmental sustainability in music production</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-check-circle text-accent"></i>
+                                        <span>Social justice advocacy platform</span>
+                                    </div>
+                                </div>
+                                <button class="bg-accent text-accent-foreground px-8 py-4 rounded-lg font-heading font-bold hover-glow">
+                                    <i class="fas fa-download mr-2"></i>Download APK
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <!-- Diverse community gathering around music performance stage -->
+                                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" alt="Community music event" class="rounded-lg shadow-lg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Demo Submission Page -->
+        <div id="demos-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4 max-w-4xl">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-8 text-center">
+                        Submit Your <span class="text-accent">Demo</span>
+                    </h1>
+                    
+                    <div class="bg-card rounded-xl p-8 md:p-12">
+                        <div class="mb-8">
+                            <h2 class="font-heading font-bold text-2xl mb-4">Ready to be heard?</h2>
+                            <p class="text-muted-foreground mb-6">
+                                We're always looking for fresh talent that pushes boundaries. Submit your demo and join the YouBBle Records family.
+                            </p>
+                            
+                            <!-- Guidelines -->
+                            <div class="bg-secondary rounded-lg p-6 mb-8">
+                                <h3 class="font-semibold text-lg mb-4 text-accent">Submission Guidelines</h3>
+                                <ul class="text-muted-foreground space-y-2">
+                                    <li>• File formats: MP3, WAV, FLAC (stems accepted)</li>
+                                    <li>• Maximum file size: 50MB per track</li>
+                                    <li>• Include 2-3 of your best tracks</li>
+                                    <li>• Provide brief artist bio and social links</li>
+                                    <li>• Response time: 2-4 weeks</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <form class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Artist/Band Name *</label>
+                                    <input type="text" required class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Email *</label>
+                                    <input type="email" required class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Phone</label>
+                                    <input type="tel" class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold mb-2">Location</label>
+                                    <input type="text" class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Genre(s)</label>
+                                <input type="text" placeholder="e.g., Electronic, Hip-Hop, R&B" class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Social Media Links</label>
+                                <textarea rows="2" placeholder="Instagram, SoundCloud, Spotify, etc." class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Artist Bio *</label>
+                                <textarea required rows="4" placeholder="Tell us your story, influences, and what makes your music unique..." class="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all"></textarea>
+                            </div>
+
+                            <!-- File Upload Section -->
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Upload Your Tracks *</label>
+                                <div class="border-2 border-dashed border-border rounded-lg p-8 text-center bg-input hover:border-accent transition-colors">
+                                    <i class="fas fa-cloud-upload-alt text-accent text-4xl mb-4"></i>
+                                    <p class="text-lg font-semibold mb-2">Drag & drop your files here</p>
+                                    <p class="text-muted-foreground mb-4">or click to browse</p>
+                                    <input type="file" multiple accept=".mp3,.wav,.flac" class="hidden" data-implementation="Use file upload component with validation">
+                                    <button type="button" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold">
+                                        Choose Files
+                                    </button>
+                                    <p class="text-xs text-muted-foreground mt-2">MP3, WAV, FLAC up to 50MB each</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-3">
+                                <input type="checkbox" id="terms" required class="w-5 h-5 text-accent bg-input border-border rounded focus:ring-accent">
+                                <label for="terms" class="text-sm">
+                                    I agree to the <a href="#" class="text-accent hover:underline">terms and conditions</a> and confirm that I own the rights to the submitted material.
+                                </label>
+                            </div>
+
+                            <button type="submit" class="w-full bg-accent text-accent-foreground py-4 rounded-lg font-heading font-bold text-lg hover-glow transition-all">
+                                Submit Demo
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Services/Kits Page -->
+        <div id="services-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-8 text-center">
+                        Our <span class="text-accent">Services</span>
+                    </h1>
+                    <p class="text-xl text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+                        Professional music services designed to elevate your artistry and accelerate your career.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Starter Kit -->
+                        <div class="bg-card rounded-xl p-8 border-2 border-border hover-glow">
+                            <div class="text-center mb-6">
+                                <h3 class="font-heading font-bold text-2xl mb-2">Starter Kit</h3>
+                                <div class="text-4xl font-black text-accent mb-4">$299</div>
+                                <p class="text-muted-foreground">Perfect for emerging artists</p>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>2 Track Production</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Basic Mixing & Mastering</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Cover Art Design</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Digital Distribution</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Basic Promotion Package</span>
+                                </li>
+                            </ul>
+                            
+                            <button class="w-full bg-accent text-accent-foreground py-3 rounded-lg font-heading font-bold hover-glow">
+                                Get Started
+                            </button>
+                        </div>
+
+                        <!-- Serious Business Kit -->
+                        <div class="bg-card rounded-xl p-8 border-2 border-accent hover-glow relative">
+                            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                                <span class="bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-bold">MOST POPULAR</span>
+                            </div>
+                            
+                            <div class="text-center mb-6">
+                                <h3 class="font-heading font-bold text-2xl mb-2">Serious Business Kit</h3>
+                                <div class="text-4xl font-black text-accent mb-4">$799</div>
+                                <p class="text-muted-foreground">For dedicated professionals</p>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>5 Track Production</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Professional Mixing & Mastering</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Custom Cover Art & Branding</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Wide Distribution Network</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Premium Promotion Campaign</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Music Video Production</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>3 Months Label Support</span>
+                                </li>
+                            </ul>
+                            
+                            <button class="w-full bg-accent text-accent-foreground py-3 rounded-lg font-heading font-bold hover-glow">
+                                Level Up
+                            </button>
+                        </div>
+
+                        <!-- Custom Solutions -->
+                        <div class="bg-card rounded-xl p-8 border-2 border-border hover-glow">
+                            <div class="text-center mb-6">
+                                <h3 class="font-heading font-bold text-2xl mb-2">Custom Solutions</h3>
+                                <div class="text-4xl font-black text-accent mb-4">Custom</div>
+                                <p class="text-muted-foreground">Tailored to your needs</p>
+                            </div>
+                            
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Full Album Production</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Tour Management</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Brand Partnership Deals</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>International Distribution</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Dedicated A&R Support</span>
+                                </li>
+                                <li class="flex items-center space-x-3">
+                                    <i class="fas fa-check text-accent"></i>
+                                    <span>Long-term Career Strategy</span>
+                                </li>
+                            </ul>
+                            
+                            <button class="w-full bg-accent text-accent-foreground py-3 rounded-lg font-heading font-bold hover-glow">
+                                Contact Us
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Additional Services -->
+                    <div class="mt-16">
+                        <h2 class="font-heading font-bold text-3xl text-center mb-8">Additional Services</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-secondary rounded-lg p-6 text-center hover-glow">
+                                <i class="fas fa-microphone text-accent text-3xl mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Studio Sessions</h3>
+                                <p class="text-muted-foreground text-sm mb-4">Professional recording time</p>
+                                <p class="text-accent font-bold">$150/hour</p>
+                            </div>
+                            <div class="bg-secondary rounded-lg p-6 text-center hover-glow">
+                                <i class="fas fa-sliders-h text-accent text-3xl mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Mixing Only</h3>
+                                <p class="text-muted-foreground text-sm mb-4">Track mixing service</p>
+                                <p class="text-accent font-bold">$200/track</p>
+                            </div>
+                            <div class="bg-secondary rounded-lg p-6 text-center hover-glow">
+                                <i class="fas fa-volume-up text-accent text-3xl mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Mastering Only</h3>
+                                <p class="text-muted-foreground text-sm mb-4">Final polish service</p>
+                                <p class="text-accent font-bold">$100/track</p>
+                            </div>
+                            <div class="bg-secondary rounded-lg p-6 text-center hover-glow">
+                                <i class="fas fa-bullhorn text-accent text-3xl mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Promotion Campaign</h3>
+                                <p class="text-muted-foreground text-sm mb-4">Marketing push</p>
+                                <p class="text-accent font-bold">$500+</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Podcasts Page -->
+        <div id="podcasts-page" class="page hidden-page pt-20">
+            <section class="py-16 bg-background">
+                <div class="container mx-auto px-4">
+                    <h1 class="font-heading font-black text-5xl md:text-6xl mb-8 text-center">
+                        YouBBle <span class="text-accent">Podcasts</span>
+                    </h1>
+                    <p class="text-xl text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+                        Dive deep into the music industry with our weekly shows featuring artist interviews, industry insights, and behind-the-scenes content.
+                    </p>
+
+                    <!-- Featured Podcast Player -->
+                    <div class="bg-card rounded-xl p-8 mb-16 max-w-4xl mx-auto">
+                        <h2 class="font-heading font-bold text-2xl mb-6 text-center">Latest Episode</h2>
+                        
+                        <!-- Mock Podcast Player -->
+                        <div class="bg-secondary rounded-lg p-6">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <!-- Professional podcast recording setup with multiple microphones -->
+                                <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200" alt="Podcast episode cover" class="w-20 h-20 rounded-lg object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg" data-bind="podcast.title">The Future of Underground Music</h3>
+                                    <p class="text-muted-foreground" data-bind="podcast.guest">with Guest: DJ NEXUS</p>
+                                    <p class="text-sm text-muted-foreground" data-bind="podcast.duration">Duration: 45:32</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Mock Audio Controls -->
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <button class="bg-accent text-accent-foreground w-12 h-12 rounded-full flex items-center justify-center hover-glow">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <div class="flex-1 bg-muted rounded-full h-2">
+                                        <div class="bg-accent h-2 rounded-full w-1/3"></div>
+                                    </div>
+                                    <span class="text-sm text-muted-foreground">15:20 / 45:32</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        <button class="text-muted-foreground hover:text-accent">
+                                            <i class="fas fa-step-backward"></i>
+                                        </button>
+                                        <button class="text-muted-foreground hover:text-accent">
+                                            <i class="fas fa-step-forward"></i>
+                                        </button>
+                                        <button class="text-muted-foreground hover:text-accent">
+                                            <i class="fas fa-redo text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <button class="text-muted-foreground hover:text-accent">
+                                            <i class="fas fa-volume-up"></i>
+                                        </button>
+                                        <button class="text-muted-foreground hover:text-accent">
+                                            <i class="fas fa-share-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Episode List -->
+                    <div class="grid md:grid-cols-2 gap-8 mb-16">
+                        <div>
+                            <h2 class="font-heading font-bold text-2xl mb-6">Recent Episodes</h2>
+                            <div class="space-y-4">
+                                <!-- @MAP: episodes.map(episode => ( -->
+                                <div class="bg-card rounded-lg p-6 hover-glow" data-mock="true">
+                                    <div class="flex items-center space-x-4">
+                                        <!-- Close-up of professional recording microphone in studio -->
+                                        <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Episode cover" class="w-16 h-16 rounded-lg object-cover">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold text-lg mb-1" data-bind="episode.title">Building Your Brand in 2024</h3>
+                                            <p class="text-muted-foreground text-sm mb-1" data-bind="episode.guest">Guest: Sarah Chen, Music Marketer</p>
+                                            <p class="text-xs text-muted-foreground" data-bind="episode.date">March 15, 2024 • 38:42</p>
+                                        </div>
+                                        <button class="text-accent hover:text-accent/80">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-card rounded-lg p-6 hover-glow" data-mock="true">
+                                    <div class="flex items-center space-x-4">
+                                        <!-- Professional audio mixing board with LED displays -->
+                                        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Episode cover" class="w-16 h-16 rounded-lg object-cover">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold text-lg mb-1" data-bind="episode.title">The Art of Collaboration</h3>
+                                            <p class="text-muted-foreground text-sm mb-1" data-bind="episode.guest">Guest: Producer Mike Torres</p>
+                                            <p class="text-xs text-muted-foreground" data-bind="episode.date">March 8, 2024 • 42:15</p>
+                                        </div>
+                                        <button class="text-accent hover:text-accent/80">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="bg-card rounded-lg p-6 hover-glow" data-mock="true">
+                                    <div class="flex items-center space-x-4">
+                                        <!-- Live concert stage with dynamic lighting and crowd -->
+                                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Episode cover" class="w-16 h-16 rounded-lg object-cover">
+                                        <div class="flex-1">
+                                            <h3 class="font-semibold text-lg mb-1" data-bind="episode.title">From Bedroom to Main Stage</h3>
+                                            <p class="text-muted-foreground text-sm mb-1" data-bind="episode.guest">Guest: Rising Artist Luna Ray</p>
+                                            <p class="text-xs text-muted-foreground" data-bind="episode.date">March 1, 2024 • 35:28</p>
+                                        </div>
+                                        <button class="text-accent hover:text-accent/80">
+                                            <i class="fas fa-play"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Shows -->
+                        <div>
+                            <h2 class="font-heading font-bold text-2xl mb-6">Upcoming Shows</h2>
+                            <div class="space-y-4">
+                                <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div>
+                                            <h3 class="font-semibold text-lg" data-bind="show.title">Live from the Studio</h3>
+                                            <p class="text-muted-foreground text-sm" data-bind="show.date">March 22, 2024 at 7:00 PM</p>
+                                        </div>
+                                        <span class="bg-accent text-accent-foreground px-3 py-1 rounded-full text-sm font-semibold">LIVE</span>
+                                    </div>
+                                    <p class="text-muted-foreground mb-4">Join us for a live recording session with special guests and audience Q&A.</p>
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-semibold hover-glow">
+                                        Add to Calendar
+                                    </button>
+                                </div>
+
+                                <div class="bg-secondary rounded-lg p-6 hover-glow" data-mock="true">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <div>
+                                            <h3 class="font-semibold text-lg" data-bind="show.title">Industry Roundtable</h3>
+                                            <p class="text-muted-foreground text-sm" data-bind="show.date">March 29, 2024 at 6:00 PM</p>
+                                        </div>
+                                        <span class="bg-muted text-muted-foreground px-3 py-1 rounded-full text-sm">UPCOMING</span>
+                                    </div>
+                                    <p class="text-muted-foreground mb-4">Panel discussion with label executives, artists, and industry professionals.</p>
+                                    <button class="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-semibold hover-glow">
+                                        RSVP Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscribe Section -->
+                    <div class="bg-secondary rounded-xl p-8 text-center">
+                        <h2 class="font-heading font-bold text-3xl mb-4">Never Miss an Episode</h2>
+                        <p class="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                            Subscribe to YouBBle Podcasts and get notified when new episodes drop. Available on all major podcast platforms.
+                        </p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <a href="#" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow flex items-center">
+                                <i class="fab fa-spotify mr-2"></i>Spotify
+                            </a>
+                            <a href="#" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow flex items-center">
+                                <i class="fab fa-apple mr-2"></i>Apple Podcasts
+                            </a>
+                            <a href="#" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow flex items-center">
+                                <i class="fab fa-google mr-2"></i>Google Podcasts
+                            </a>
+                            <a href="#" class="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-semibold hover-glow flex items-center">
+                                <i class="fas fa-rss mr-2"></i>RSS Feed
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-secondary border-t border-border py-12">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+                                <i class="fas fa-music text-accent-foreground"></i>
+                            </div>
+                            <span class="font-heading font-bold text-xl">YouBBle Records</span>
+                        </div>
+                        <p class="text-muted-foreground">
+                            Bold music for a bold future. Empowering artists and communities through authentic sound and social impact.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+                        <ul class="space-y-2 text-muted-foreground">
+                            <li><a href="#" onclick="showPage('about')" class="hover:text-accent transition-colors">About Us</a></li>
+                            <li><a href="#" onclick="showPage('releases')" class="hover:text-accent transition-colors">Releases</a></li>
+                            <li><a href="#" onclick="showPage('demos')" class="hover:text-accent transition-colors">Submit Demo</a></li>
+                            <li><a href="#" onclick="showPage('services')" class="hover:text-accent transition-colors">Services</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg mb-4">Community</h3>
+                        <ul class="space-y-2 text-muted-foreground">
+                            <li><a href="#" onclick="showPage('projects')" class="hover:text-accent transition-colors">Projects</a></li>
+                            <li><a href="#" onclick="showPage('podcasts')" class="hover:text-accent transition-colors">Podcasts</a></li>
+                            <li><a href="#" class="hover:text-accent transition-colors">Events</a></li>
+                            <li><a href="#" class="hover:text-accent transition-colors">Merch Store</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg mb-4">Connect</h3>
+                        <div class="flex space-x-4 mb-4">
+                            <a href="#" class="text-muted-foreground hover:text-accent transition-colors">
+                                <i class="fab fa-instagram text-xl"></i>
+                            </a>
+                            <a href="#" class="text-muted-foreground hover:text-accent transition-colors">
+                                <i class="fab fa-twitter text-xl"></i>
+                            </a>
+                            <a href="#" class="text-muted-foreground hover:text-accent transition-colors">
+                                <i class="fab fa-spotify text-xl"></i>
+                            </a>
+                            <a href="#" class="text-muted-foreground hover:text-accent transition-colors">
+                                <i class="fab fa-youtube text-xl"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted-foreground text-sm">
+                            hello@youbblerecords.com<br>
+                            +1 (555) 123-4567
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-border pt-8 text-center text-muted-foreground">
+                    <p>&copy; 2024 YouBBle Records. All rights reserved. | Privacy Policy | Terms of Service</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation and Page Management
+        function enterSite() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('main-site').classList.remove('hidden-page');
+            document.getElementById('main-site').classList.add('active-page');
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active-page');
+                page.classList.add('hidden-page');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.classList.remove('hidden-page');
+                targetPage.classList.add('active-page');
+            }
+            
+            // Update navigation active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('text-accent');
+                link.classList.add('text-foreground');
+            });
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Form Handling
+        (function() {
+            // Demo submission form
+            const demoForm = document.querySelector('#demos-page form');
+            if (demoForm) {
+                demoForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // TODO: Implement demo submission logic
+                    alert('Demo submitted successfully! We\'ll review your submission and get back to you within 2-4 weeks.');
+                });
+            }
+
+            // Collaboration form
+            const collabForm = document.querySelector('#about-page form');
+            if (collabForm) {
+                collabForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // TODO: Implement collaboration request logic
+                    alert('Collaboration request sent! We\'ll be in touch soon.');
+                });
+            }
+
+            // Service kit buttons
+            const serviceButtons = document.querySelectorAll('#services-page button');
+            serviceButtons.forEach(button => {
+                if (button.textContent.includes('Get Started') || button.textContent.includes('Level Up')) {
+                    button.addEventListener('click', function() {
+                        // TODO: Implement service purchase flow
+                        alert('Redirecting to payment gateway...');
+                    });
+                }
+            });
+
+            // File upload handling
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    // TODO: Implement file validation and upload
+                    console.log('Files selected:', this.files);
+                });
+            }
+        })();
+
+        // Audio player controls
+        (function() {
+            const playButtons = document.querySelectorAll('.fas.fa-play');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Implement audio playback
+                    if (this.classList.contains('fa-play')) {
+                        this.classList.remove('fa-play');
+                        this.classList.add('fa-pause');
+                    } else {
+                        this.classList.remove('fa-pause');
+                        this.classList.add('fa-play');
+                    }
+                });
+            });
+        })();
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Initialize with home page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set home as active initially when entering main site
+        });
+    </script>
+</body>
+</html>
