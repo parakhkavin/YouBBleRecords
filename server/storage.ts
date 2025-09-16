@@ -103,7 +103,7 @@ export class MemStorage implements IStorage {
         id: "4",
         name: "Artist Collection Cap",
         price: "$24.99",
-        image: "client/public/merch/landing-logo.png",
+        image: "/merch/landing-logo.png",
         category: "accessories",
       },
     ];
