@@ -93,8 +93,39 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Collaborate Section */}
+          {/* Card wrapper (close properly before Competition Rules) */}
           <Card className="bg-secondary rounded-xl p-8 md:p-12">
+            <CardContent className="p-0">
+              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Collaborate With Us</h2>
+              <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+                Whether you're an artist, producer, or industry professional, we're always looking for creative partnerships that push boundaries.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Competition Rules Section */}
+            <Card className="bg-secondary rounded-xl p-8 md:p-12 mt-8 mb-8">
+              <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Competition Rules</h2>
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                <li>MP3 or M4A only, 50MB maximum</li>
+                <li>Each category is a separate entry and fee</li>
+                <li>Sync requires at least one other category</li>
+                <li>Teen category requires DOB and parental consent</li>
+                <li>No modifications after submission, late submissions rejected</li>
+              </ul>
+              <p className="mt-6 text-sm text-muted-foreground">
+                Support,{" "}
+                <a
+                  href="mailto:support@youbblerecords.com"
+                  className="text-yellow-400 underline hover:text-yellow-300"
+                >
+                  support@youbblerecords.com
+                </a>
+              </p>
+            </Card>
+            {/* Collaborate Section */}
+            <Card className="bg-secondary rounded-xl p-8 md:p-12">
+
             <CardContent className="p-0">
               <h2 className="font-heading font-bold text-3xl mb-6 text-center">Collaborate With Us</h2>
               <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">

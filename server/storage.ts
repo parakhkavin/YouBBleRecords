@@ -10,6 +10,9 @@ import {
   type PodcastEpisode
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import fs from "fs";
+import path from "path";
+
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -204,3 +207,12 @@ export class MemStorage implements IStorage {
 }
 
 export const storage = new MemStorage();
+
+export async function saveUpload(file: Express.Multer.File, subdir = "uploads"): Promise<string> {
+  const base = path.resolve(process.cwd(), subdir);
+  if (!fs.existsSync(base)) fs.mkdirSync(base, { recursive: true });
+  const dest = path.join(base, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+  // TODO, malware scan integration hook before writing, BRD security requirement
+  fs.writeFileSync(dest, file.buffer);
+  return dest;
+}

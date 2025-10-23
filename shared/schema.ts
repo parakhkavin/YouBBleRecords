@@ -85,3 +85,35 @@ export type InsertCollaborationRequest = z.infer<typeof insertCollaborationReque
 export type Release = typeof releases.$inferSelect;
 export type MerchItem = typeof merchItems.$inferSelect;
 export type PodcastEpisode = typeof podcastEpisodes.$inferSelect;
+
+// Competition schema, BRD compliance
+export type CompetitionCategory = "Open" | "Teen" | "Cover" | "Sync";
+export type EntryStatus = "pending" | "qualified" | "disqualified";
+
+export interface CompetitionEntryDTO {
+  id?: number;
+  artistName: string;
+  email: string;
+  songTitle: string;
+  streamUrl?: string;
+  lyrics?: string;
+  isCover: boolean;
+  coverDetails?: string;
+  categories: CompetitionCategory[];
+  dob?: string; // ISO date
+  parentalConsentUrl?: string;
+  audioUrl: string;
+  paymentId?: string;
+  status: EntryStatus;
+  createdAt?: string;
+}
+
+export interface JudgeScoreDTO {
+  id?: number;
+  entryId: number;
+  judgeId: string; // email or uuid
+  criteria: { name: string; score: number }[];
+  total: number;
+  createdAt?: string;
+}
+
