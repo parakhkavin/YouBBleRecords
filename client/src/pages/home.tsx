@@ -6,6 +6,8 @@ import Carousel from "@/components/carousel";
 import { Play, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Release, MerchItem } from "@shared/schema";
+import appStoreBadge from "@/assets/app_store.svg";
+import gStoreBadge from "@/assets/g_store.png";
 
 export default function HomePage() {
   const [, setLocation] = useLocation();
@@ -23,23 +25,22 @@ export default function HomePage() {
       icon: "🎤",
       title: "Artist Development",
       description: "Comprehensive support for emerging artists to develop their sound and brand.",
+      onClick: () => setLocation("/services"),
     },
     {
       icon: "❤️",
-      title: "Social Impact",
-      description: "Music-driven initiatives for positive community change and social awareness.",
+      title: "Social Impact Programs",
+      description: "Programs and initiatives that use music to drive community impact and awareness.",
+      onClick: () => setLocation("/services"),
     },
     {
-      icon: "👥",
-      title: "Collaboration Hub",
-      description: "Connect artists, producers, and industry professionals for creative partnerships.",
-    },
-    {
-      icon: "🎓",
-      title: "Music Education",
-      description: "Workshops and resources for music production, business, and creative development.",
+      icon: "📣",
+      title: "Campaigns and Events",
+      description: "Discover competitions, showcases, and live experiences run by YouBBle Records.",
+      onClick: () => setLocation("/events"),
     },
   ];
+
 
   const getMerchIcon = (category: string, item: MerchItem) => {
     // Use the actual product image instead of emoji
@@ -67,12 +68,12 @@ export default function HomePage() {
         
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <h1 className="font-heading font-black text-6xl md:text-8xl mb-6">
-            UNLEASH THE BEAT,
-            <span className="text-accent block">JOIN THE MOVEMENT</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Where underground meets mainstream. Where artists become legends. Where music creates impact.
-          </p>
+             UNLEASH YOUR SOUND,
+             <span className="text-accent block">JOIN THE MOVEMENT</span>
+           </h1>
+           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+             Supporting Local Creatives from Every Beat of the World.
+           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => setLocation("/releases")}
@@ -212,6 +213,48 @@ export default function HomePage() {
           )}
         </div>
       </section>
-    </div>
+      {/* Find Creatives near You */}
+        <section className="py-16 bg-background">
+         <div className="container mx-auto px-4 grid gap-8 md:grid-cols-2 items-center">
+           <div>
+             <h2 className="font-heading font-bold text-3xl mb-4">
+               Find Creatives near You
+             </h2>
+             <p className="text-muted-foreground mb-6">
+               Supporting Local Creatives from Every Beat of the World. Discover nearby artists, producers, and creatives through our partner app Youbbler.
+             </p>
+           </div>
+           <div className="flex flex-col sm:flex-row gap-4 items-center">
+            {/* App Store official badge */}
+            <a
+              href="https://example.com/appstore" // TODO: replace with real App Store link
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:opacity-80"
+            >
+              <img
+                src={appStoreBadge}
+                alt="Download on the App Store"
+                className="h-12 w-auto"
+              />
+            </a>
+
+            {/* Google Play official badge */}
+            <a
+              href="https://example.com/playstore" // TODO: replace with real Google Play link
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:opacity-80"
+            >
+              <img
+                src={gStoreBadge}
+                alt="Get it on Google Play"
+                className="h-12 w-auto"
+              />
+            </a>
+          </div>
+         </div>
+       </section>
+     </div>
   );
 }

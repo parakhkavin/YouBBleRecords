@@ -1,218 +1,188 @@
-import { 
-  type User, 
-  type InsertUser, 
-  type DemoSubmission, 
-  type InsertDemoSubmission,
-  type CollaborationRequest,
-  type InsertCollaborationRequest,
-  type Release,
-  type MerchItem,
-  type PodcastEpisode
-} from "@shared/schema";
-import { randomUUID } from "crypto";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
+import type { Express } from "express";
 
+/**
+ * Simple, durable, file-based storage for development.
+ * - Files saved to server/uploads/{subdir}/<timestamp>__<safeName>
+ * - Records saved to server/data/entries.json
+ *
+ * Upgrade path:
+ * - Swap these functions to use Drizzle ORM later (keep the same method signatures).
+ */
 
-export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
-  createDemoSubmission(demo: InsertDemoSubmission): Promise<DemoSubmission>;
-  createCollaborationRequest(request: InsertCollaborationRequest): Promise<CollaborationRequest>;
-  getReleases(): Promise<Release[]>;
-  getFeaturedReleases(): Promise<Release[]>;
-  getMerchItems(): Promise<MerchItem[]>;
-  getPodcastEpisodes(): Promise<PodcastEpisode[]>;
-  getLatestPodcastEpisode(): Promise<PodcastEpisode | undefined>;
+import { fileURLToPath } from "node:url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT = path.resolve(__dirname, ".");
+
+const DATA_DIR = path.join(ROOT, "data");
+const UPLOADS_DIR = path.join(ROOT, "uploads");
+const ENTRIES_PATH = path.join(DATA_DIR, "entries.json");
+
+// Ensure folders exist at module load
+for (const dir of [DATA_DIR, UPLOADS_DIR]) {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+if (!fs.existsSync(ENTRIES_PATH)) fs.writeFileSync(ENTRIES_PATH, "[]", "utf-8");
+
+// ---------- Types ----------
+export type CompetitionEntryStatus = "pending" | "disqualified" | "withdrawn";
+
+export type CompetitionEntry = {
+  id: string;                // uuid-ish
+  createdAt: string;         // ISO
+  artistName: string;
+  email: string;
+  songTitle: string;
+  streamUrl?: string;
+  lyrics?: string;
+  categories: string[];
+  dob?: string;
+  audioPath: string;         // relative path under uploads/
+  consentPath?: string;      // relative path under uploads/
+  paymentClientSecret: string;
+  paid: boolean;             // we’ll keep false/true; webhook later
+  status: CompetitionEntryStatus;
+  locked: boolean;           // "no modification after submission"
+};
+
+export type CreateEntryInput = Omit<CompetitionEntry,
+  "id" | "createdAt" | "status" | "locked"
+> & {};
+
+// ---------- Helpers ----------
+function readEntries(): CompetitionEntry[] {
+  const raw = fs.readFileSync(ENTRIES_PATH, "utf-8");
+  return JSON.parse(raw) as CompetitionEntry[];
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-  private demoSubmissions: Map<string, DemoSubmission>;
-  private collaborationRequests: Map<string, CollaborationRequest>;
-  private releases: Release[];
-  private merchItems: MerchItem[];
-  private podcastEpisodes: PodcastEpisode[];
-
-  constructor() {
-    this.users = new Map();
-    this.demoSubmissions = new Map();
-    this.collaborationRequests = new Map();
-    
-    // Initialize with some sample data
-    this.releases = [
-      {
-        id: "1",
-        title: "Electric Storm",
-        artist: "NEXXA",
-        coverImage: "/releases/release1.png",
-        releaseDate: "March 2024",
-        genres: ["Electronic", "Bass"],
-        spotifyUrl: "#",
-        appleUrl: "#",
-        youtubeUrl: "#",
-        featured: true,
-      },
-      {
-        id: "2", 
-        title: "Underground Vibes",
-        artist: "DarkTunes",
-        coverImage: "/releases/release2.png",
-        releaseDate: "February 2024",
-        genres: ["Hip-Hop", "Underground"],
-        spotifyUrl: "#",
-        appleUrl: "#",
-        youtubeUrl: "#",
-        featured: true,
-      },
-      {
-        id: "3",
-        title: "Cosmic Beats",
-        artist: "ZEPHYR",
-        coverImage: "/releases/release1.png",
-        releaseDate: "January 2024",
-        genres: ["Ambient", "Electronic"],
-        spotifyUrl: "#",
-        appleUrl: "#",
-        youtubeUrl: "#",
-        featured: true,
-      },
-    ];
-
-    this.merchItems = [
-      {
-        id: "1",
-        name: "YouBBle Record Tee",
-        price: "$29.99",
-        image: "/merch/merch-tshirt.png",
-        category: "apparel",
-      },
-      {
-        id: "2",
-        name: "Vinyl Glow Hoodie", 
-        price: "$49.99",
-        image: "/merch/merch-hoodie.png",
-        category: "apparel",
-      },
-      {
-        id: "3",
-        name: "Limited Edition Vinyl",
-        price: "$39.99",
-        image: "/releases/release1.png",
-        category: "music",
-      },
-      {
-        id: "4",
-        name: "Artist Collection Cap",
-        price: "$24.99",
-        image: "/merch/landing-logo.png",
-        category: "accessories",
-      },
-    ];
-
-    this.podcastEpisodes = [
-      {
-        id: "1",
-        title: "The Future of Underground Music",
-        guest: "DJ NEXUS",
-        duration: "45:32",
-        coverImage: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=200",
-        publishDate: "March 22, 2024",
-        description: "Exploring the evolution of underground music and its impact on mainstream culture.",
-      },
-      {
-        id: "2",
-        title: "Building Your Brand in 2024",
-        guest: "Sarah Chen, Music Marketer",
-        duration: "38:42",
-        coverImage: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100",
-        publishDate: "March 15, 2024",
-        description: "Essential strategies for building a strong music brand in the digital age.",
-      },
-      {
-        id: "3",
-        title: "The Art of Collaboration",
-        guest: "Producer Mike Torres",
-        duration: "42:15",
-        coverImage: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100",
-        publishDate: "March 8, 2024",
-        description: "How to create meaningful collaborations in the music industry.",
-      },
-    ];
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
-  }
-
-  async createDemoSubmission(demo: InsertDemoSubmission): Promise<DemoSubmission> {
-    const id = randomUUID();
-    const submission: DemoSubmission = { 
-      ...demo,
-      genres: demo.genres || null,
-      location: demo.location || null,
-      phone: demo.phone || null,
-      socialLinks: demo.socialLinks || null,
-      id, 
-      submittedAt: new Date() 
-    };
-    this.demoSubmissions.set(id, submission);
-    return submission;
-  }
-
-  async createCollaborationRequest(request: InsertCollaborationRequest): Promise<CollaborationRequest> {
-    const id = randomUUID();
-    const collaboration: CollaborationRequest = { 
-      ...request, 
-      id, 
-      submittedAt: new Date() 
-    };
-    this.collaborationRequests.set(id, collaboration);
-    return collaboration;
-  }
-
-  async getReleases(): Promise<Release[]> {
-    return this.releases;
-  }
-
-  async getFeaturedReleases(): Promise<Release[]> {
-    return this.releases.filter(release => release.featured);
-  }
-
-  async getMerchItems(): Promise<MerchItem[]> {
-    return this.merchItems;
-  }
-
-  async getPodcastEpisodes(): Promise<PodcastEpisode[]> {
-    return this.podcastEpisodes;
-  }
-
-  async getLatestPodcastEpisode(): Promise<PodcastEpisode | undefined> {
-    return this.podcastEpisodes[0];
-  }
+function writeEntries(rows: CompetitionEntry[]) {
+  fs.writeFileSync(ENTRIES_PATH, JSON.stringify(rows, null, 2), "utf-8");
 }
 
-export const storage = new MemStorage();
-
-export async function saveUpload(file: Express.Multer.File, subdir = "uploads"): Promise<string> {
-  const base = path.resolve(process.cwd(), subdir);
-  if (!fs.existsSync(base)) fs.mkdirSync(base, { recursive: true });
-  const dest = path.join(base, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
-  // TODO, malware scan integration hook before writing, BRD security requirement
-  fs.writeFileSync(dest, file.buffer);
-  return dest;
+function safeName(original: string) {
+  // strip path, then sanitize
+  const base = original.replace(/[/\\]+/g, "_");
+  return base.replace(/[^a-zA-Z0-9._-]/g, "_");
 }
+
+function ensureDir(dir: string) {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+function nowISO() {
+  return new Date().toISOString();
+}
+
+function genId() {
+  // compact unique id
+  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2, 8);
+}
+
+// ---------- Public API ----------
+export async function saveUpload(file: Express.Multer.File, subdir = "audio"): Promise<string> {
+  const dir = path.join(UPLOADS_DIR, subdir);
+  ensureDir(dir);
+
+  const stamp = Date.now();
+  const destName = `${stamp}__${safeName(file.originalname || "upload.bin")}`;
+  const destPath = path.join(dir, destName);
+
+  // file.buffer present due to memoryStorage
+  fs.writeFileSync(destPath, file.buffer);
+  // return relative path for portability
+  const rel = path.relative(ROOT, destPath);
+  return rel;
+}
+
+/**
+ * Create a new entry, lock it immediately (no modification allowed).
+ * Throws if a conflicting/duplicate entry is detected (same email+songTitle).
+ */
+export async function createCompetitionEntry(input: CreateEntryInput): Promise<CompetitionEntry> {
+  const rows = readEntries();
+
+  // Simple duplicate rule: same email + song title not allowed (business choice)
+  const dupe = rows.find(r =>
+    r.email.toLowerCase() === input.email.toLowerCase() &&
+    r.songTitle.trim().toLowerCase() === input.songTitle.trim().toLowerCase()
+  );
+  if (dupe) {
+    throw Object.assign(new Error("Duplicate entry: this song has already been submitted by this email."), { status: 409 });
+  }
+
+  const entry: CompetitionEntry = {
+    id: genId(),
+    createdAt: nowISO(),
+    artistName: input.artistName,
+    email: input.email,
+    songTitle: input.songTitle,
+    streamUrl: input.streamUrl || "",
+    lyrics: input.lyrics || "",
+    categories: input.categories || [],
+    dob: input.dob || "",
+    audioPath: input.audioPath,
+    consentPath: input.consentPath,
+    paymentClientSecret: input.paymentClientSecret,
+    paid: !!input.paid,
+    status: "pending",
+    locked: true, // enforce "no modification after submission"
+  };
+
+  rows.push(entry);
+  writeEntries(rows);
+  return entry;
+}
+
+export async function listCompetitionEntries(): Promise<CompetitionEntry[]> {
+  return readEntries();
+}
+
+export async function getCompetitionEntry(id: string): Promise<CompetitionEntry | undefined> {
+  return readEntries().find(r => r.id === id);
+}
+
+// Example stubs you already use elsewhere (demos/collaborations/releases/etc.)
+export const storage = {
+  async createDemoSubmission(data: any) {
+    const file = path.join(DATA_DIR, "demos.json");
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]", "utf-8");
+    const arr = JSON.parse(fs.readFileSync(file, "utf-8"));
+    arr.push({ id: genId(), createdAt: nowISO(), ...data });
+    fs.writeFileSync(file, JSON.stringify(arr, null, 2), "utf-8");
+    return arr[arr.length - 1];
+  },
+  async createCollaborationRequest(data: any) {
+    const file = path.join(DATA_DIR, "collaborations.json");
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]", "utf-8");
+    const arr = JSON.parse(fs.readFileSync(file, "utf-8"));
+    arr.push({ id: genId(), createdAt: nowISO(), ...data });
+    fs.writeFileSync(file, JSON.stringify(arr, null, 2), "utf-8");
+    return arr[arr.length - 1];
+  },
+  async getReleases() {
+    const file = path.join(DATA_DIR, "releases.json");
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]", "utf-8");
+    return JSON.parse(fs.readFileSync(file, "utf-8"));
+  },
+  async getFeaturedReleases() {
+    const all = await this.getReleases();
+    return all.filter((r: any) => r.featured);
+  },
+  async getMerchItems() {
+    const file = path.join(DATA_DIR, "merch.json");
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]", "utf-8");
+    return JSON.parse(fs.readFileSync(file, "utf-8"));
+  },
+  async getPodcastEpisodes() {
+    const file = path.join(DATA_DIR, "podcasts.json");
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]", "utf-8");
+    return JSON.parse(fs.readFileSync(file, "utf-8"));
+  },
+  async getLatestPodcastEpisode() {
+    const eps = await this.getPodcastEpisodes();
+    // naive latest by createdAt
+    return eps.sort((a: any, b: any) => (b.createdAt || "").localeCompare(a.createdAt || ""))[0];
+  },
+};

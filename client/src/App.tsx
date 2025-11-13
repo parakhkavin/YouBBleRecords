@@ -12,9 +12,11 @@ import ProjectsPage from "@/pages/projects";
 import DemosPage from "@/pages/demos";
 import ServicesPage from "@/pages/services";
 import PodcastsPage from "@/pages/podcasts";
+import EventsPage from "@/pages/events";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import NotFound from "@/pages/not-found";
+
 
 function Router() {
   const [location] = useLocation();
@@ -39,6 +41,7 @@ function Router() {
         <Route path="/projects" component={ProjectsPage} />
         <Route path="/demos" component={DemosPage} />
         <Route path="/services" component={ServicesPage} />
+        <Route path="/events" component={EventsPage} />
         <Route path="/podcasts" component={PodcastsPage} />
         <Route component={NotFound} />
       </Switch>

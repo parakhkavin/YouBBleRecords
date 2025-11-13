@@ -12,23 +12,32 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { insertCollaborationRequestSchema, type InsertCollaborationRequest } from "@shared/schema";
 
+type ContactFormValues = InsertCollaborationRequest & {
+  phone?: string;
+  state?: string;
+  country?: string;
+};
+
 export default function AboutPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<InsertCollaborationRequest>({
+  const form = useForm<ContactFormValues>({
     resolver: zodResolver(insertCollaborationRequestSchema),
     defaultValues: {
       name: "",
       email: "",
       collaborationType: "",
       message: "",
+      phone: "",
+      state: "",
+      country: "",
     },
   });
 
   const collaborationMutation = useMutation({
-    mutationFn: async (data: InsertCollaborationRequest) => {
+    mutationFn: async (data: ContactFormValues) => {
       setIsSubmitting(true);
       const response = await apiRequest("POST", "/api/collaborations", data);
       return response.json();
@@ -70,38 +79,36 @@ export default function AboutPage() {
               YouBBle Records was born from a vision to bridge the gap between underground authenticity and mainstream impact.
             </p>
             
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="bg-card p-8">
-                <CardContent className="p-0">
-                  <h3 className="font-heading font-bold text-2xl mb-4 text-accent">Our Mission</h3>
-                  <p className="text-muted-foreground">
-                    To empower artists with bold vision, creating music that not only entertains but transforms communities and drives social change.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card p-8">
-                <CardContent className="p-0">
-                  <h3 className="font-heading font-bold text-2xl mb-4 text-accent">Our Values</h3>
-                  <ul className="text-muted-foreground space-y-2">
-                    <li>• Authentic artistic expression</li>
-                    <li>• Community-driven impact</li>
-                    <li>• Innovation in music business</li>
-                    <li>• Supporting emerging talent</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+               <Card className="bg-card p-8">
+                 <CardContent className="p-0">
+                   <h3 className="font-heading font-bold text-2xl mb-4 text-accent">Our Mission</h3>
+                   <p className="text-muted-foreground">
+                     To empower creatives by combining industry standard music production, artist development, media training, and live experiences through a sustainable, growth ready business model.
+                   </p>
+                 </CardContent>
+               </Card>
+               <Card className="bg-card p-8">
+                 <CardContent className="p-0">
+                   <h3 className="font-heading font-bold text-2xl mb-4 text-accent">Our Vision</h3>
+                   <p className="text-muted-foreground">
+                     To become a leading creative incubator that bridges international diaspora talent with equitable industry opportunities, ensuring underrepresented voices are heard, developed, and sustained in the global music economy.
+                   </p>
+                 </CardContent>
+               </Card>
+               <Card className="bg-card p-8">
+                 <CardContent className="p-0">
+                   <h3 className="font-heading font-bold text-2xl mb-4 text-accent">Our Values</h3>
+                   <ul className="text-muted-foreground space-y-2">
+                     <li>Equity and fair opportunity for creatives</li>
+                     <li>Community centered collaboration</li>
+                     <li>Sustainability in the music ecosystem</li>
+                     <li>Respect for culture and identity</li>
+                   </ul>
+                 </CardContent>
+               </Card>
+             </div>
           </div>
-
-          {/* Card wrapper (close properly before Competition Rules) */}
-          <Card className="bg-secondary rounded-xl p-8 md:p-12">
-            <CardContent className="p-0">
-              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Collaborate With Us</h2>
-              <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-                Whether you're an artist, producer, or industry professional, we're always looking for creative partnerships that push boundaries.
-              </p>
-            </CardContent>
-          </Card>
 
           {/* Competition Rules Section */}
             <Card className="bg-secondary rounded-xl p-8 md:p-12 mt-8 mb-8">
@@ -127,9 +134,9 @@ export default function AboutPage() {
             <Card className="bg-secondary rounded-xl p-8 md:p-12">
 
             <CardContent className="p-0">
-              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Collaborate With Us</h2>
+              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Contact Us</h2>
               <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-                Whether you're an artist, producer, or industry professional, we're always looking for creative partnerships that push boundaries.
+                Whether you are a creative, a brand, an event organizer, an investor, or a partner, this is the best way to reach YouBBle Records.
               </p>
               
               <Form {...form}>
@@ -171,33 +178,85 @@ export default function AboutPage() {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="collaborationType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-semibold">Collaboration Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger 
-                              className="bg-input border-border focus:ring-accent focus:border-accent"
-                              data-testid="select-collaboration-type"
-                            >
-                              <SelectValue placeholder="Select collaboration type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Artist Partnership">Artist Partnership</SelectItem>
-                            <SelectItem value="Production Collaboration">Production Collaboration</SelectItem>
-                            <SelectItem value="Business Partnership">Business Partnership</SelectItem>
-                            <SelectItem value="Social Impact Project">Social Impact Project</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                   <FormField
+                     control={form.control}
+                     name="phone"
+                     render={({ field }) => (
+                       <FormItem>
+                         <FormLabel className="text-sm font-semibold">Phone Number</FormLabel>
+                         <FormControl>
+                           <Input
+                             {...field}
+                             className="bg-input border-border focus:ring-accent focus:border-accent"
+                           />
+                         </FormControl>
+                         <FormMessage />
+                       </FormItem>
+                     )}
+                   />
+ 
+                   <FormField
+                     control={form.control}
+                     name="state"
+                     render={({ field }) => (
+                       <FormItem>
+                         <FormLabel className="text-sm font-semibold">State</FormLabel>
+                         <FormControl>
+                           <Input
+                             {...field}
+                             className="bg-input border-border focus:ring-accent focus:border-accent"
+                           />
+                         </FormControl>
+                         <FormMessage />
+                       </FormItem>
+                     )}
+                   />
+ 
+                   <FormField
+                     control={form.control}
+                     name="country"
+                     render={({ field }) => (
+                       <FormItem>
+                         <FormLabel className="text-sm font-semibold">Country</FormLabel>
+                         <FormControl>
+                           <Input
+                             {...field}
+                             className="bg-input border-border focus:ring-accent focus:border-accent"
+                           />
+                         </FormControl>
+                         <FormMessage />
+                       </FormItem>
+                     )}
+                   />
+                                     
+                   <FormField
+                     control={form.control}
+                     name="collaborationType"
+                     render={({ field }) => (
+                       <FormItem>
+                         <FormLabel className="text-sm font-semibold">Why are you reaching out to us?</FormLabel>
+                         <Select onValueChange={field.onChange} defaultValue={field.value}>
+                           <FormControl>
+                             <SelectTrigger
+                               className="bg-input border-border focus:ring-accent focus:border-accent"
+                               data-testid="select-contact-reason"
+                             >
+                               <SelectValue placeholder="Select a reason" />
+                             </SelectTrigger>
+                           </FormControl>
+                           <SelectContent>
+                             <SelectItem value="Creatives">Creatives - I need help with collaboration (Artist, Songwriter, Producer, Film, Dance, and Arts professional)</SelectItem>
+                             <SelectItem value="Brands Ads and Sponsorship">Brands Ads and Sponsorship - I am interested in sponsoring projects</SelectItem>
+                             <SelectItem value="Event Management">Event Management - I need help with an event</SelectItem>
+                             <SelectItem value="Investors">Investors - I am interested in funding projects</SelectItem>
+                             <SelectItem value="Technical Support">Technical Support - Website and App support</SelectItem>
+                             <SelectItem value="Legal Claims and Copyright">Legal Claims and Copyright issues</SelectItem>
+                           </SelectContent>
+                         </Select>
+                         <FormMessage />
+                       </FormItem>
+                     )}
+                   />
 
                   <FormField
                     control={form.control}

@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo, useState } from "react";
+import PaymentForm from "@/components/PaymentForm";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -93,24 +94,26 @@ export default function CompetitionEntryPage() {
     return true;
   };
 
-  const startPayment = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/api/competition/payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: feeBreakdown.total, currency: "usd" }),
-      });
-      if (!res.ok) throw new Error("Payment init failed");
-      const data = await res.json();
-      setPaymentClientSecret(data.clientSecret);
-      toast({ title: "Payment Ready", description: "Proceed with payment to continue." });
-    } catch {
-      toast({ title: "Payment Error", description: "Could not initialize payment." });
-    }
-  };
+const startPayment = async () => {
+  try {
+    const res = await fetch("http://localhost:5001/api/competition/payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: feeBreakdown.total, currency: "usd" }),
+    });
+    if (!res.ok) throw new Error("Payment init failed");
+    const data = await res.json();
+    setPaymentClientSecret(data.clientSecret);
+    toast({ title: "Payment Ready", description: "Please complete payment to continue." });
+  } catch {
+    toast({ title: "Payment Error", description: "Could not initialize payment." });
+  }
+};
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!artistName || !email || !songTitle) {
       toast({ title: "Missing Fields", description: "Artist name, email, and song title are required." });
       return;
@@ -121,7 +124,11 @@ export default function CompetitionEntryPage() {
       return;
     }
     if (!paid) {
-      toast({ title: "Payment Required", description: "Please complete payment before submission." });
+      toast({
+        title: "Payment Required",
+        description: "Please complete payment before submitting your entry.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -173,11 +180,11 @@ export default function CompetitionEntryPage() {
         </summary>
         <Card className="bg-secondary rounded-xl p-6 md:p-8">
           <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-            <li>File formats: MP3 or M4A only (50MB maximum)</li>
-            <li>Each category is a separate entry and fee</li>
-            <li>Sync requires at least one other category</li>
-            <li>Teen category requires DOB and parental consent</li>
-            <li>No modifications after submission, late submissions rejected</li>
+            <li>File formats: MP3, WAV, or FLAC (stems accepted).</li>
+            <li>Maximum file size: 50 MB per track.</li>
+            <li>Include 1 to 3 of your best tracks.</li>
+            <li>Provide a brief artist biography and social links in your submission.</li>
+            <li>Typical response time is 2 to 4 weeks.</li>
           </ul>
           <p className="mt-4 text-sm text-muted-foreground">
             For help, email{" "}
@@ -194,7 +201,7 @@ export default function CompetitionEntryPage() {
       <Card className="bg-card rounded-2xl shadow-lg p-10 md:p-12">
         <CardHeader>
           <CardTitle className="font-heading text-4xl text-center mb-10">
-            Music Competition Entry
+            Submit Your Demo
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -240,9 +247,24 @@ export default function CompetitionEntryPage() {
 
             {/* Upload Section */}
             <div>
-              <label className="block text-lg font-semibold mb-2">Upload Your Track *</label>
-              <div className="border-2 border-dashed border-yellow-400 rounded-xl p-10 text-center bg-secondary/50 hover:bg-secondary transition">
+              <label className="block text-lg font-semibold mb-2 text-foreground">
+                Upload Your Track *
+              </label>
+
+              {/* Drag-and-drop container */}
+              <div
+                className="border-2 border-dashed border-yellow-400 rounded-xl p-10 text-center bg-secondary/50 hover:bg-secondary transition"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    setAudioFile(file);
+                  }
+                }}
+              >
                 <div className="flex flex-col items-center space-y-3">
+                  {/* Upload icon */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-12 w-12 text-yellow-400"
@@ -251,21 +273,46 @@ export default function CompetitionEntryPage() {
                     stroke="currentColor"
                     strokeWidth={2}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4m0 0l-4 4m4-4v12" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4m0 0l-4 4m4-4v12"
+                    />
                   </svg>
-                  <p className="font-medium text-lg">Drag & drop your file here</p>
+
+                  {/* Instructions */}
+                  <p className="font-medium text-lg">
+                    Drag & drop your file here
+                  </p>
                   <p className="text-sm text-muted-foreground">or click to browse</p>
+
+                  {/* Custom file input */}
                   <label className="inline-block cursor-pointer">
                     <span className="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-lg hover:bg-yellow-300 transition">
                       Choose File
                     </span>
-                    <input type="file" accept=".mp3,.m4a,audio/mpeg,audio/mp4,audio/aac" onChange={(e) => setAudioFile(e.target.files?.[0] || null)} className="hidden" />
+                    <input
+                      type="file"
+                      accept=".mp3,.m4a,audio/mpeg,audio/mp4,audio/aac"
+                      onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                      className="hidden"
+                    />
                   </label>
-                  <p className="text-xs text-muted-foreground">MP3 or M4A only, up to 50MB</p>
+
+                  {/* File feedback */}
+                  {audioFile ? (
+                    <p className="text-sm text-green-400 mt-2">
+                      ✅ Selected: <span className="font-medium">{audioFile.name}</span>{" "}
+                      ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      MP3 or M4A only, up to 50 MB
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-
             {/* Rules */}
             <div className="flex items-center gap-2">
               <Checkbox id="agree" checked={acceptedRules} onCheckedChange={(v) => setAcceptedRules(!!v)} />
@@ -286,24 +333,36 @@ export default function CompetitionEntryPage() {
                 <span>${feeBreakdown.total}</span>
               </div>
 
-              {!paymentClientSecret && (
-                <Button type="button" onClick={startPayment} className="bg-yellow-400 text-black font-semibold px-5 py-2 rounded-lg hover:bg-yellow-300">
-                  Initialize Payment
-                </Button>
-              )}
-              {paymentClientSecret && !paid && (
-                <Button type="button" onClick={() => { setPaid(true); toast({ title: "Payment Recorded", description: "You can now submit your entry." }); }}>
-                  Confirm Payment (Demo)
-                </Button>
-              )}
+             {!paymentClientSecret && (
+            <Button
+              type="button"
+              onClick={startPayment}
+              className="bg-yellow-400 text-black font-semibold px-5 py-2 rounded-lg hover:bg-yellow-300"
+            >
+              Initialize Payment
+            </Button>
+          )}
+
+          {paymentClientSecret && !paid && (
+            <PaymentForm
+              clientSecret={paymentClientSecret}
+              onPaid={() => {
+                setPaid(true);
+                toast({
+                  title: "Payment Confirmed",
+                  description: "Your payment was successful. You can now submit your entry.",
+                });
+              }}
+            />
+          )}
             </div>
 
             {/* Submit Button */}
             <div className="flex justify-center">
               <Button
                 type="submit"
-                disabled={submitting}
-                className="bg-yellow-400 text-black font-bold px-8 py-4 mt-4 rounded-lg hover:bg-yellow-300 transition-all"
+                disabled={submitting || !paid}
+                className="bg-yellow-400 text-black font-bold px-8 py-4 mt-4 rounded-lg shadow-md hover:shadow-yellow-500/40 hover:scale-105 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {submitting ? "Submitting..." : "Submit Entry"}
               </Button>

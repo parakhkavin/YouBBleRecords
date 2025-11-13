@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import type { Release } from "@shared/schema";
 
 export default function ReleasesPage() {
@@ -17,8 +18,75 @@ export default function ReleasesPage() {
           <h1 className="font-heading font-black text-5xl md:text-6xl mb-12 text-center">
             Our <span className="text-accent">Releases</span>
           </h1>
-          
-          {isLoading ? (
+           
+           {/* Resident Artists */}
+           <div className="mb-12">
+             <h2 className="font-heading font-bold text-3xl mb-4 text-center">Resident Artists</h2>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               <Card className="bg-card hover-glow">
+                 <CardContent className="p-6 text-center">
+                   <h3 className="font-heading text-xl mb-2">Naiya Skye</h3>
+                   <p className="text-muted-foreground text-sm">Resident artist at YouBBle Records.</p>
+                 </CardContent>
+               </Card>
+               <Card className="bg-card hover-glow">
+                 <CardContent className="p-6 text-center">
+                   <h3 className="font-heading text-xl mb-2">Smriti Shrestha</h3>
+                   <p className="text-muted-foreground text-sm">Resident artist at YouBBle Records.</p>
+                 </CardContent>
+               </Card>
+               <Card className="bg-card hover-glow">
+                 <CardContent className="p-6 text-center">
+                   <h3 className="font-heading text-xl mb-2">Tero Bau</h3>
+                   <p className="text-muted-foreground text-sm">Resident artist at YouBBle Records.</p>
+                 </CardContent>
+               </Card>
+             </div>
+           </div>
+ 
+           {/* Curated Playlists */}
+           <div className="mb-12">
+             <h2 className="font-heading font-bold text-3xl mb-4 text-center">Curated Playlists</h2>
+             <p className="text-muted-foreground text-center mb-6 max-w-2xl mx-auto">
+               Submit your track for review and be considered for our curated playlists. Terms and conditions apply.
+             </p>
+             <div className="flex justify-center gap-4">
+               <Button
+                 onClick={() => window.open("#", "_blank")}
+                 className="bg-accent text-accent-foreground font-heading font-bold hover-glow"
+               >
+                 Listen to Playlists
+               </Button>
+               <Button
+                 variant="outline"
+                 onClick={() => window.open("/demos", "_self")}
+                 className="border-accent text-accent font-heading font-bold hover-glow"
+               >
+                 Submit Your Track
+               </Button>
+             </div>
+           </div>
+ 
+           {/* Hear It First */}
+           <div className="mb-12">
+             <h2 className="font-heading font-bold text-3xl mb-4 text-center">Hear It First</h2>
+             <p className="text-muted-foreground text-center mb-4">
+               Get notified of our events and releases in the future.
+             </p>
+             {/* Placeholder email capture for now */}
+             <div className="flex flex-col sm:flex-row gap-3 justify-center">
+               <Input
+                 type="email"
+                 placeholder="Enter your email"
+                 className="max-w-xs bg-input border-border"
+               />
+               <Button className="bg-accent text-accent-foreground font-heading font-bold hover-glow">
+                 Join Guestlist
+               </Button>
+             </div>
+           </div>
+ 
+           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <Card key={i} className="bg-card hover-glow">
@@ -67,21 +135,21 @@ export default function ReleasesPage() {
                       </Button>
                       <div className="flex space-x-2">
                         <a 
-                          href={release.spotifyUrl} 
+                          href={release.spotifyUrl ?? undefined}
                           className="text-accent hover:text-accent/80 text-xl"
                           data-testid={`link-spotify-${release.id}`}
                         >
                           <ExternalLink className="w-5 h-5" />
                         </a>
                         <a 
-                          href={release.appleUrl} 
+                          href={release.appleUrl ?? undefined}
                           className="text-accent hover:text-accent/80 text-xl"
                           data-testid={`link-apple-${release.id}`}
                         >
                           <ExternalLink className="w-5 h-5" />
                         </a>
                         <a 
-                          href={release.youtubeUrl} 
+                          href={release.youtubeUrl ?? undefined}
                           className="text-accent hover:text-accent/80 text-xl"
                           data-testid={`link-youtube-${release.id}`}
                         >

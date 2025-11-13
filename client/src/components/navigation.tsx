@@ -16,6 +16,7 @@ export default function Navigation() {
     { href: "/projects", label: "Projects" },
     { href: "/demos", label: "Competition Entry" },
     { href: "/services", label: "Services" },
+    { href: "/events", label: "Events" },
     { href: "/podcasts", label: "Podcasts" },
   ];
 

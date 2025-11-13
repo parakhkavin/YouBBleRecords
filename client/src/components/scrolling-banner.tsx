@@ -1,9 +1,11 @@
-interface ScrollingBannerProps {
-  items: Array<{
-    icon: string;
-    title: string;
-    description: string;
-  }>;
+interface ScrollingBannerItem {
+  icon: string;
+  title: string;
+  description: string;
+  onClick?: () => void;
+} 
+ interface ScrollingBannerProps {
+  items: ScrollingBannerItem[];
 }
 
 export default function ScrollingBanner({ items }: ScrollingBannerProps) {
@@ -14,9 +16,12 @@ export default function ScrollingBanner({ items }: ScrollingBannerProps) {
     <div className="relative overflow-hidden">
       <div className="flex space-x-6 scroll-banner">
         {duplicatedItems.map((item, index) => (
-          <div 
-            key={index} 
-            className="flex-none w-80 bg-secondary rounded-lg p-6 hover-glow"
+          <div
+            key={index}
+            className={`flex-none w-80 bg-secondary rounded-lg p-6 hover-glow ${
+              item.onClick ? "cursor-pointer" : ""
+            }`}
+            onClick={item.onClick}
             data-testid={`program-card-${index}`}
           >
             <div className="text-3xl mb-4">{item.icon}</div>

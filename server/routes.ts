@@ -1,10 +1,20 @@
+import {
+  storage,
+  saveUpload,
+  createCompetitionEntry,
+  listCompetitionEntries,
+  getCompetitionEntry,
+} from "./storage";
+
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
 import { insertDemoSubmissionSchema, insertCollaborationRequestSchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
-import { saveUpload } from "./storage";
+
+import { createPaymentIntent } from "./payments.ts";
+
+
 
 /* ------------------------------------------------------------------
    SETTINGS: competition submission deadline and file constraints
@@ -22,6 +32,8 @@ const upload = multer({
    ROUTE REGISTRATION
 -------------------------------------------------------------------*/
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.post("/api/competition/payment-intent", createPaymentIntent);
+
   /* ---------------------- DEMO SUBMISSION ---------------------- */
   app.post("/api/demos", async (req, res) => {
     try {
@@ -202,15 +214,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let consentPath: string | undefined;
         if (consent) consentPath = await saveUpload(consent, "consents");
 
-        // TODO: persist entry to DB (Drizzle)
-        // TODO: send confirmation email to user
+        // Persist the entry (no-modification lock is enforced in storage)
+        const entry = await createCompetitionEntry({
+          artistName: body.artistName,
+          email: body.email,
+          songTitle: body.songTitle,
+          streamUrl: body.streamUrl || "",
+          lyrics: body.lyrics || "",
+          categories,
+          dob: body.dob || "",
+          audioPath,
+          consentPath,
+          paymentClientSecret: body.paymentClientSecret,
+          paid: !!body.paid, // will be false in current flow; set true via webhook later
+        });
+
+        // TODO: send confirmation email
 
         return res.json({
           ok: true,
           message: "Submission received successfully",
+          id: entry.id,
+          createdAt: entry.createdAt,
           audioPath,
           consentPath,
         });
+
       } catch (error) {
         console.error("Competition submission error:", error);
         return res.status(500).json({ error: "Submission failed" });
@@ -219,6 +248,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   );
 
   /* ---------------------- CREATE SERVER ---------------------- */
+    // --- Admin Read APIs (Phase 1) ---
+  app.get("/api/competition/entries", async (_req, res) => {
+    try {
+      const rows = await listCompetitionEntries();
+      // Minimal redaction example; you might show everything to admins later.
+      return res.json(rows);
+    } catch (e) {
+      return res.status(500).json({ error: "Failed to list entries" });
+    }
+  });
+
+  app.get("/api/competition/entry/:id", async (req, res) => {
+    try {
+      const row = await getCompetitionEntry(req.params.id);
+      if (!row) return res.status(404).json({ error: "Not found" });
+      return res.json(row);
+    } catch (e) {
+      return res.status(500).json({ error: "Failed to fetch entry" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

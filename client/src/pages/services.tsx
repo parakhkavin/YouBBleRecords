@@ -5,49 +5,61 @@ import { Check, Mic, Sliders, Volume2, Megaphone } from "lucide-react";
 
 export default function ServicesPage() {
   const serviceTiers = [
-    {
-      name: "Starter Kit",
-      price: "$299",
-      description: "Perfect for emerging artists",
-      featured: false,
-      features: [
-        "2 Track Production",
-        "Basic Mixing & Mastering",
-        "Cover Art Design",
-        "Digital Distribution",
-        "Basic Promotion Package",
-      ],
-    },
-    {
-      name: "Serious Business Kit",
-      price: "$799",
-      description: "For dedicated professionals",
-      featured: true,
-      features: [
-        "5 Track Production",
-        "Professional Mixing & Mastering",
-        "Custom Cover Art & Branding",
-        "Wide Distribution Network",
-        "Premium Promotion Campaign",
-        "Music Video Production",
-        "3 Months Label Support",
-      ],
-    },
-    {
-      name: "Custom Solutions",
-      price: "Custom",
-      description: "Tailored to your needs",
-      featured: false,
-      features: [
-        "Full Album Production",
-        "Tour Management",
-        "Brand Partnership Deals",
-        "International Distribution",
-        "Dedicated A&R Support",
-        "Long-term Career Strategy",
-      ],
-    },
-  ];
+  {
+    name: "Social Impact Kit",
+    price: "Pricing coming soon",
+    description: "Demo, learnings, trainings, and APK access focused on social impact.",
+    featured: false,
+    icon: <Megaphone className="w-8 h-8 text-accent" />,
+    features: [
+      "Demo submission support",
+      "Learnings and trainings",
+      "APK access",
+    ],
+  },
+  {
+    name: "Garagestar Kit",
+    price: "Pricing coming soon",
+    description: "Core production and branding package for emerging artists.",
+    featured: true,
+    icon: <Mic className="w-8 h-8 text-accent" />,
+    features: [
+      "Social Impact components",
+      "Produced, mixed, mastered MP3",
+      "Album artwork",
+      "Artist pictures",
+      "Lyrics video",
+    ],
+  },
+  {
+    name: "Live Venue Star Kit",
+    price: "Pricing coming soon",
+    description: "Studio plus live ready package for artists stepping onto stages.",
+    featured: false,
+    icon: <Volume2 className="w-8 h-8 text-accent" />,
+    features: [
+      "All Garagestar Kit inclusions",
+      "Original video",
+      "Distribution and publishing",
+      "Master STEM file",
+      "Submit to publications",
+      "Event placement",
+    ],
+  },
+  {
+    name: "360 Business Kit",
+    price: "Pricing coming soon",
+    description: "Full stack business and growth kit for long term artist development.",
+    featured: false,
+    icon: <Sliders className="w-8 h-8 text-accent" />,
+    features: [
+      "All Live Venue Star Kit inclusions",
+      "Run ads",
+      "Enter competitions",
+      "Artist placement",
+    ],
+  },
+];
 
   const additionalServices = [
     {
