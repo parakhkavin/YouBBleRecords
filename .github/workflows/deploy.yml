@@ -7,28 +7,27 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repo
+      - name: 📥 Checkout repo
         uses: actions/checkout@v4
-
-      - name: Set up Node
+        
+      - name: 🟢 Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Install dependencies
+          
+      - name: 📦 Install dependencies
         run: npm install
-
-      - name: Build Vite app
+        
+      - name: 🏗️ Build Vite app
         run: npm run build
-
-      - name: Upload to HostGator
+        
+      - name: 📂 Upload to HostGator
         uses: samkirkland/ftp-deploy-action@4.2.0
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          local-dir: dist
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/
           server-dir: /home1/zewdfmte/public_html/website_36a60b34/
-
