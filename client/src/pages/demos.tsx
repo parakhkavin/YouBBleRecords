@@ -1,74 +1,87 @@
-"use client";
-import React, { useMemo, useState } from "react";
-import PaymentForm from "@/components/PaymentForm";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import PaymentForm from "@/components/PaymentForm";
+import demo1 from "@/assets/demo1.png";
+import demo2 from "@/assets/demo2.png";
 
-type CategoryKey = "Open" | "Teen" | "Cover" | "Sync";
+const MAX_BYTES = 50 * 1024 * 1024; // 50MB
+const ALLOWED_EXTENSIONS = [".mp3", ".wav", ".flac"];
+const SUBMISSION_FEE = 29.99;
 
-const CATEGORY_FEES: Record<CategoryKey, number> = {
-  Open: 20,
-  Teen: 15,
-  Cover: 20,
-  Sync: 30,
-};
-
-const MAX_BYTES = 50 * 1024 * 1024;
-const ALLOWED_MIME = ["audio/mpeg", "audio/mp4", "audio/x-m4a", "audio/aac"];
-
-export default function CompetitionEntryPage() {
-  const [artistName, setArtistName] = useState("");
+export default function SubmitDemoPage() {
+  // Form state
+  const [stageName, setStageName] = useState("");
+  const [role, setRole] = useState<string[]>([]);
+  const [contactFirstName, setContactFirstName] = useState("");
+  const [contactLastName, setContactLastName] = useState("");
+  const [currentCity, setCurrentCity] = useState("");
+  const [currentState, setCurrentState] = useState("");
+  const [currentCountry, setCurrentCountry] = useState("");
+  const [originalCity, setOriginalCity] = useState("");
+  const [originalState, setOriginalState] = useState("");
+  const [originalCountry, setOriginalCountry] = useState("");
   const [email, setEmail] = useState("");
-  const [songTitle, setSongTitle] = useState("");
-  const [streamUrl, setStreamUrl] = useState("");
-  const [lyrics, setLyrics] = useState("");
-  const [dob, setDob] = useState("");
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [consentFile, setConsentFile] = useState<File | null>(null);
-  const [acceptedRules, setAcceptedRules] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<CategoryKey[]>([]);
+  const [phone, setPhone] = useState("");
+  const [spotify, setSpotify] = useState("");
+  const [youtube, setYoutube] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [tiktok, setTiktok] = useState("");
+  const [otherUrl, setOtherUrl] = useState("");
+  const [artistBio, setArtistBio] = useState("");
+  const [audioFiles, setAudioFiles] = useState<File[]>([]);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
   const [paid, setPaid] = useState(false);
 
   const { toast } = useToast();
 
-  const feeBreakdown = useMemo(() => {
-    const list = selectedCategories.map((c) => ({
-      name: c,
-      amount: CATEGORY_FEES[c] || 0,
-    }));
-    const subtotal = list.reduce((s, it) => s + it.amount, 0);
-    return { list, subtotal, total: subtotal };
-  }, [selectedCategories]);
+  const roles = ["Artist", "Producer", "Songwriter", "Performer", "Musician"];
 
-  const addCategory = (val: CategoryKey) =>
-    setSelectedCategories((prev) => (prev.includes(val) ? prev : [...prev, val]));
-  const removeCategory = (val: CategoryKey) =>
-    setSelectedCategories((prev) => prev.filter((x) => x !== val));
-
-  const validateSyncRule = () => {
-    if (selectedCategories.includes("Sync") && selectedCategories.length < 2) {
-      toast({ title: "Rule Error", description: "Sync requires at least one other category." });
-      return false;
-    }
-    return true;
+  const toggleRole = (selectedRole: string) => {
+    setRole((prev) =>
+      prev.includes(selectedRole)
+        ? prev.filter((r) => r !== selectedRole)
+        : [...prev, selectedRole]
+    );
   };
 
-  const validateTeenRule = () => {
-    if (selectedCategories.includes("Teen")) {
-      if (!dob) {
-        toast({ title: "Teen Category", description: "DOB is required for Teen category." });
+  const validateFiles = () => {
+    if (audioFiles.length === 0) {
+      toast({ 
+        title: "Missing Files", 
+        description: "Please upload at least 1 track (max 3)." 
+      });
+      return false;
+    }
+    if (audioFiles.length > 3) {
+      toast({ 
+        title: "Too Many Files", 
+        description: "Maximum 3 tracks allowed." 
+      });
+      return false;
+    }
+    for (const file of audioFiles) {
+      if (file.size > MAX_BYTES) {
+        toast({ 
+          title: "File Too Large", 
+          description: `${file.name} exceeds 50MB limit.` 
+        });
         return false;
       }
-      if (!consentFile) {
-        toast({
-          title: "Teen Category",
-          description: "Parental consent upload is required for Teen category.",
+      const hasValidExtension = ALLOWED_EXTENSIONS.some(ext => 
+        file.name.toLowerCase().endsWith(ext)
+      );
+      if (!hasValidExtension) {
+        toast({ 
+          title: "Invalid Format", 
+          description: `${file.name} must be MP3, WAV, or FLAC.` 
         });
         return false;
       }
@@ -76,57 +89,85 @@ export default function CompetitionEntryPage() {
     return true;
   };
 
-  const validateAudio = (file: File | null) => {
-    if (!file) {
-      toast({ title: "Missing File", description: "Please upload an audio file." });
-      return false;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length + audioFiles.length > 3) {
+      toast({ 
+        title: "Too Many Files", 
+        description: "Maximum 3 tracks allowed." 
+      });
+      return;
     }
-    if (file.size > MAX_BYTES) {
-      toast({ title: "File Too Large", description: "Audio must be 50MB or less." });
-      return false;
-    }
-    const okType = ALLOWED_MIME.includes(file.type);
-    const okExt = file.name.toLowerCase().endsWith(".mp3") || file.name.toLowerCase().endsWith(".m4a");
-    if (!okType && !okExt) {
-      toast({ title: "Invalid Format", description: "Only MP3 or M4A files are accepted." });
-      return false;
-    }
-    return true;
+    setAudioFiles((prev) => [...prev, ...files]);
   };
 
-const startPayment = async () => {
-  try {
-    const res = await fetch("http://localhost:5001/api/competition/payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: feeBreakdown.total, currency: "usd" }),
-    });
-    if (!res.ok) throw new Error("Payment init failed");
-    const data = await res.json();
-    setPaymentClientSecret(data.clientSecret);
-    toast({ title: "Payment Ready", description: "Please complete payment to continue." });
-  } catch {
-    toast({ title: "Payment Error", description: "Could not initialize payment." });
-  }
-};
+  const removeFile = (index: number) => {
+    setAudioFiles((prev) => prev.filter((_, i) => i !== index));
+  };
 
-  
+  const startPayment = async () => {
+    try {
+      const res = await fetch("/api/demo/payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: SUBMISSION_FEE, currency: "usd" }),
+      });
+      if (!res.ok) throw new Error("Payment init failed");
+      const data = await res.json();
+      setPaymentClientSecret(data.clientSecret);
+      toast({ 
+        title: "Payment Ready", 
+        description: "Please complete payment to continue." 
+      });
+    } catch {
+      toast({ 
+        title: "Payment Error", 
+        description: "Could not initialize payment." 
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!artistName || !email || !songTitle) {
-      toast({ title: "Missing Fields", description: "Artist name, email, and song title are required." });
+
+    if (!stageName || !contactFirstName || !contactLastName || !email) {
+      toast({ 
+        title: "Missing Required Fields", 
+        description: "Please fill in all required fields." 
+      });
       return;
     }
-    if (!validateSyncRule() || !validateTeenRule() || !validateAudio(audioFile)) return;
-    if (!acceptedRules) {
-      toast({ title: "Rules", description: "You must accept the competition rules." });
+
+    if (role.length === 0) {
+      toast({ 
+        title: "Missing Role", 
+        description: "Please select at least one role." 
+      });
       return;
     }
+
+    if (!currentCity || !currentState || !currentCountry) {
+      toast({ 
+        title: "Missing Location", 
+        description: "Please provide your current location." 
+      });
+      return;
+    }
+
+    if (!validateFiles()) return;
+
+    if (!acceptedTerms) {
+      toast({ 
+        title: "Terms Required", 
+        description: "You must accept the terms and conditions." 
+      });
+      return;
+    }
+
     if (!paid) {
       toast({
         title: "Payment Required",
-        description: "Please complete payment before submitting your entry.",
+        description: "Please complete payment before submitting your demo.",
         variant: "destructive",
       });
       return;
@@ -134,242 +175,556 @@ const startPayment = async () => {
 
     setSubmitting(true);
     try {
-      const form = new FormData();
-      form.append("artistName", artistName);
-      form.append("email", email);
-      form.append("songTitle", songTitle);
-      form.append("streamUrl", streamUrl);
-      form.append("lyrics", lyrics);
-      form.append("categories", JSON.stringify(selectedCategories));
-      form.append("dob", dob);
-      if (consentFile) form.append("consentFile", consentFile);
-      if (audioFile) form.append("file", audioFile);
-      form.append("paymentClientSecret", paymentClientSecret || "");
-
-      const res = await fetch("http://localhost:3001/api/competition/submit", {
-        method: "POST",
-        body: form,
+      const formData = new FormData();
+      formData.append("stageName", stageName);
+      formData.append("role", JSON.stringify(role));
+      formData.append("contactFirstName", contactFirstName);
+      formData.append("contactLastName", contactLastName);
+      formData.append("currentLocation", `${currentCity}, ${currentState}, ${currentCountry}`);
+      formData.append("originalLocation", `${originalCity}, ${originalState}, ${originalCountry}`);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("spotify", spotify);
+      formData.append("youtube", youtube);
+      formData.append("instagram", instagram);
+      formData.append("tiktok", tiktok);
+      formData.append("otherUrl", otherUrl);
+      formData.append("artistBio", artistBio);
+      formData.append("paymentClientSecret", paymentClientSecret || "");
+      
+      audioFiles.forEach((file) => {
+        formData.append("tracks", file);
       });
-      if (!res.ok) throw new Error("Submit failed");
-      toast({ title: "Submitted", description: "Your entry has been received!" });
-      setArtistName("");
+
+      const res = await fetch("/api/demo/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Submission failed");
+
+      toast({ 
+        title: "Success!", 
+        description: "Your demo has been submitted. We'll review it within 2-4 weeks." 
+      });
+
+      // Reset form
+      setStageName("");
+      setRole([]);
+      setContactFirstName("");
+      setContactLastName("");
+      setCurrentCity("");
+      setCurrentState("");
+      setCurrentCountry("");
+      setOriginalCity("");
+      setOriginalState("");
+      setOriginalCountry("");
       setEmail("");
-      setSongTitle("");
-      setStreamUrl("");
-      setLyrics("");
-      setDob("");
-      setAudioFile(null);
-      setConsentFile(null);
-      setSelectedCategories([]);
-      setAcceptedRules(false);
+      setPhone("");
+      setSpotify("");
+      setYoutube("");
+      setInstagram("");
+      setTiktok("");
+      setOtherUrl("");
+      setArtistBio("");
+      setAudioFiles([]);
+      setAcceptedTerms(false);
       setPaid(false);
       setPaymentClientSecret(null);
     } catch {
-      toast({ title: "Error", description: "Submission failed, try again later." });
+      toast({ 
+        title: "Submission Error", 
+        description: "Failed to submit demo. Please try again." 
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-20 px-4">
-      {/* Submission Guidelines */}
-      <details open className="mb-8">
-        <summary className="cursor-pointer text-xl font-semibold text-yellow-400 mb-2">
-          Submission Guidelines
-        </summary>
-        <Card className="bg-secondary rounded-xl p-6 md:p-8">
-          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-            <li>File formats: MP3, WAV, or FLAC (stems accepted).</li>
-            <li>Maximum file size: 50 MB per track.</li>
-            <li>Include 1 to 3 of your best tracks.</li>
-            <li>Provide a brief artist biography and social links in your submission.</li>
-            <li>Typical response time is 2 to 4 weeks.</li>
-          </ul>
-          <p className="mt-4 text-sm text-muted-foreground">
-            For help, email{" "}
-            <a
-              href="mailto:support@youbblerecords.com"
-              className="text-yellow-400 underline hover:text-yellow-300"
-            >
-              support@youbblerecords.com
-            </a>
-          </p>
-        </Card>
-      </details>
-
-      <Card className="bg-card rounded-2xl shadow-lg p-10 md:p-12">
-        <CardHeader>
-          <CardTitle className="font-heading text-4xl text-center mb-10">
-            Submit Your Demo
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Two-column layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input placeholder="Artist Name *" value={artistName} onChange={(e) => setArtistName(e.target.value)} />
-              <Input type="email" placeholder="Email *" value={email} onChange={(e) => setEmail(e.target.value)} />
-              <Input placeholder="Song Title *" value={songTitle} onChange={(e) => setSongTitle(e.target.value)} />
-              <Input placeholder="Streaming URL (optional)" value={streamUrl} onChange={(e) => setStreamUrl(e.target.value)} />
+    <div className="pt-20 pb-16">
+      {/* Hero Section with Image */}
+      <section className="relative mb-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            {/* Hero Image */}
+            <div className="rounded-2xl mb-8 overflow-hidden">
+              <img 
+                src={demo1} 
+                alt="Calling All Creatives - Submit Your Demos" 
+                className="w-full h-auto object-cover"
+              />
             </div>
-            <Textarea placeholder="Lyrics (optional)" value={lyrics} onChange={(e) => setLyrics(e.target.value)} />
 
-            {/* Category Selection */}
-            <div>
-              <label className="font-medium">Categories</label>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {(["Open", "Teen", "Cover", "Sync"] as CategoryKey[]).map((key) => {
-                  const selected = selectedCategories.includes(key);
-                  return (
-                    <Button
-                      key={key}
-                      type="button"
-                      variant={selected ? "default" : "secondary"}
-                      onClick={() => (selected ? removeCategory(key) : addCategory(key))}
-                    >
-                      {key} ${CATEGORY_FEES[key]}
-                    </Button>
-                  );
-                })}
+            {/* Intro Text */}
+            <Card className="bg-card rounded-xl p-8 mb-8">
+              <div className="prose prose-invert max-w-none space-y-4 text-muted-foreground">
+                <p>
+                  Whether you're obsessed with making music, constantly creating, love to sing but have no
+                  songs yet, enjoy collaborating, or simply wish you had a real support team behind you — <strong>this is
+                  your moment</strong>.
+                </p>
+                <p className="font-semibold text-accent">
+                  Youbble Records is an independent US-based record label empowering local and
+                  diaspora artists through a complete ecosystem of artist development, global distribution,
+                  and music publishing.
+                </p>
+                <p>
+                  If you're an emerging creative, a "not-so-sure" bathroom or bedroom performer, a songwriter
+                  and composer, or a seasoned artist ready for the next level — and you're looking for a platform
+                  to help you produce your music, elevate your craft, distribute globally, and publish your work —
+                  you're in the right place.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground mt-4">
-                Sync requires one additional category. Each category incurs a separate fee.
+            </Card>
+
+            {/* What We're Looking For */}
+            <Card className="bg-secondary rounded-xl p-8 mb-8">
+              <h2 className="font-heading font-bold text-3xl mb-6 text-accent">
+                What We're Looking For
+              </h2>
+              <p className="text-muted-foreground mb-4">
+                We're scouting artists from local and international diaspora communities who bring:
               </p>
-            </div>
+              <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
+                <li>Creativity</li>
+                <li>Passion</li>
+                <li>Hunger</li>
+                <li>Dedication</li>
+                <li>A desire to create, grow, and perform</li>
+                <li>Real talent but no reliable support system yet</li>
+              </ul>
+              <p className="mt-6 text-accent font-semibold">
+                If that sounds like you, we want to hear from you.
+              </p>
+            </Card>
 
-            {selectedCategories.includes("Teen") && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-                <Input type="file" accept=".pdf,.png,.jpg,.jpeg" onChange={(e) => setConsentFile(e.target.files?.[0] || null)} />
+            {/* Why Submit Section */}
+            <Card className="bg-card rounded-xl p-8 mb-8">
+              <h2 className="font-heading font-bold text-3xl mb-6 text-accent">
+                Why Submit to Youbble Records?
+              </h2>
+              <div className="space-y-4 text-muted-foreground">
+                <p>
+                  By submitting your demo, you're stepping into a growing network of songwriters, musicians,
+                  producers, and other creatives from the local and international diaspora scene. You're
+                  connecting with a team built to support you, develop you, and help your music reach listeners
+                  worldwide.
+                </p>
+                <p className="font-semibold">At Youbble Records:</p>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li>We don't just listen to demos — we invest in people</li>
+                  <li>We take the time to understand your story, your sound, and your potential</li>
+                  <li>We're committed to giving emerging and overlooked voices a real platform, real opportunities, and real guidance</li>
+                </ul>
+                <p className="font-semibold mt-6">Submitting your demo means:</p>
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li>You'll be considered for artist development and production, and/or distribution and publishing programs</li>
+                  <li>Your music will be considered for our playlists</li>
+                  <li>You'll gain access to potential collaborators and producers</li>
+                  <li>Your music could be brought to life, distributed globally, and protected through publishing</li>
+                  <li>You become an extension of Youbble Records label that champions cultural identity, originality, and global reach</li>
+                </ul>
+                <p className="mt-6 text-accent font-semibold text-lg">
+                  If you're ready to grow, ready to be heard, and ready for a team that believes in your journey — send us your demo.
+                </p>
               </div>
-            )}
+            </Card>
+          </div>
+        </div>
+      </section>
 
-            {/* Upload Section */}
-            <div>
-              <label className="block text-lg font-semibold mb-2 text-foreground">
-                Upload Your Track *
-              </label>
+      {/* Submission Guidelines */}
+      <section className="container mx-auto px-4 mb-12">
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-secondary rounded-xl p-8">
+            <h3 className="text-2xl font-semibold mb-4 text-yellow-400">
+              Submission Guidelines
+            </h3>
+            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+              <li>File formats: MP3, WAV, FLAC (stems accepted)</li>
+              <li>Maximum file size: 50MB per track</li>
+              <li>Include 1-3 of your best tracks</li>
+              <li>Provide brief artist bio and social links</li>
+              <li>Response time: 2-4 weeks</li>
+            </ul>
+          </Card>
+        </div>
+      </section>
 
-              {/* Drag-and-drop container */}
-              <div
-                className="border-2 border-dashed border-yellow-400 rounded-xl p-10 text-center bg-secondary/50 hover:bg-secondary transition"
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  if (e.dataTransfer.files.length > 0) {
-                    const file = e.dataTransfer.files[0];
-                    setAudioFile(file);
-                  }
-                }}
-              >
-                <div className="flex flex-col items-center space-y-3">
-                  {/* Upload icon */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-12 w-12 text-yellow-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4m0 0l-4 4m4-4v12"
-                    />
-                  </svg>
-
-                  {/* Instructions */}
-                  <p className="font-medium text-lg">
-                    Drag & drop your file here
-                  </p>
-                  <p className="text-sm text-muted-foreground">or click to browse</p>
-
-                  {/* Custom file input */}
-                  <label className="inline-block cursor-pointer">
-                    <span className="bg-yellow-400 text-black font-semibold px-6 py-2 rounded-lg hover:bg-yellow-300 transition">
-                      Choose File
-                    </span>
-                    <input
-                      type="file"
-                      accept=".mp3,.m4a,audio/mpeg,audio/mp4,audio/aac"
-                      onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
-                      className="hidden"
-                    />
+      {/* Submission Form */}
+      <section className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-card rounded-2xl shadow-lg p-8 md:p-12">
+            <CardHeader>
+              <CardTitle className="font-heading text-4xl text-center mb-8">
+                Submit Your Demo
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Stage Name */}
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Stage Name *
                   </label>
+                  <Input
+                    placeholder="Your stage name"
+                    value={stageName}
+                    onChange={(e) => setStageName(e.target.value)}
+                    required
+                  />
+                </div>
 
-                  {/* File feedback */}
-                  {audioFile ? (
-                    <p className="text-sm text-green-400 mt-2">
-                      ✅ Selected: <span className="font-medium">{audioFile.name}</span>{" "}
-                      ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
-                    </p>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">
-                      MP3 or M4A only, up to 50 MB
-                    </p>
+                {/* Role Selection */}
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    I am * (Select all that apply)
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {roles.map((r) => (
+                      <Button
+                        key={r}
+                        type="button"
+                        variant={role.includes(r) ? "default" : "outline"}
+                        onClick={() => toggleRole(r)}
+                        className={role.includes(r) ? "bg-accent" : ""}
+                      >
+                        {r}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Contact Name */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Contact First Name *
+                    </label>
+                    <Input
+                      placeholder="First name"
+                      value={contactFirstName}
+                      onChange={(e) => setContactFirstName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Contact Last Name *
+                    </label>
+                    <Input
+                      placeholder="Last name"
+                      value={contactLastName}
+                      onChange={(e) => setContactLastName(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Current Location */}
+                <div>
+                  <label className="block text-sm font-semibold mb-3">
+                    Currently Based In *
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Input
+                      placeholder="City"
+                      value={currentCity}
+                      onChange={(e) => setCurrentCity(e.target.value)}
+                      required
+                    />
+                    <Input
+                      placeholder="State/Province"
+                      value={currentState}
+                      onChange={(e) => setCurrentState(e.target.value)}
+                      required
+                    />
+                    <Input
+                      placeholder="Country"
+                      value={currentCountry}
+                      onChange={(e) => setCurrentCountry(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Original Location */}
+                <div>
+                  <label className="block text-sm font-semibold mb-3">
+                    Originally From
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Input
+                      placeholder="City"
+                      value={originalCity}
+                      onChange={(e) => setOriginalCity(e.target.value)}
+                    />
+                    <Input
+                      placeholder="State/Province"
+                      value={originalState}
+                      onChange={(e) => setOriginalState(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Country"
+                      value={originalCountry}
+                      onChange={(e) => setOriginalCountry(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* Contact Info */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Email Address *
+                    </label>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">
+                      Phone Number (optional)
+                    </label>
+                    <Input
+                      type="tel"
+                      placeholder="+1 (555) 123-4567"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* Media Links */}
+                <div>
+                  <label className="block text-sm font-semibold mb-3">
+                    Media Links
+                  </label>
+                  <div className="space-y-3">
+                    <Input
+                      placeholder="Spotify URL"
+                      value={spotify}
+                      onChange={(e) => setSpotify(e.target.value)}
+                    />
+                    <Input
+                      placeholder="YouTube URL"
+                      value={youtube}
+                      onChange={(e) => setYoutube(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Instagram URL"
+                      value={instagram}
+                      onChange={(e) => setInstagram(e.target.value)}
+                    />
+                    <Input
+                      placeholder="TikTok URL"
+                      value={tiktok}
+                      onChange={(e) => setTiktok(e.target.value)}
+                    />
+                    <Input
+                      placeholder="Other URL"
+                      value={otherUrl}
+                      onChange={(e) => setOtherUrl(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* Artist Bio */}
+                <div>
+                  <label className="block text-sm font-semibold mb-2">
+                    Brief Artist Bio
+                  </label>
+                  <Textarea
+                    placeholder="Tell us about yourself, your musical journey, influences, and goals..."
+                    value={artistBio}
+                    onChange={(e) => setArtistBio(e.target.value)}
+                    rows={6}
+                  />
+                </div>
+
+                {/* File Upload */}
+                <div>
+                  <label className="block text-lg font-semibold mb-3 text-foreground">
+                    Upload Your Tracks * (1-3 tracks)
+                  </label>
+                  
+                  <div className="border-2 border-dashed border-accent rounded-xl p-8 text-center bg-secondary/50 hover:bg-secondary transition">
+                    <div className="flex flex-col items-center space-y-4">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-12 w-12 text-accent"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 12l-4-4m0 0l-4 4m4-4v12"
+                        />
+                      </svg>
+                      
+                      <p className="font-medium text-lg">
+                        Choose your audio files
+                      </p>
+                      
+                      <label className="inline-block cursor-pointer">
+                        <span className="bg-accent text-accent-foreground font-semibold px-6 py-3 rounded-lg hover:opacity-90 transition">
+                          Browse Files
+                        </span>
+                        <input
+                          type="file"
+                          accept=".mp3,.wav,.flac"
+                          multiple
+                          onChange={handleFileChange}
+                          className="hidden"
+                        />
+                      </label>
+                      
+                      <p className="text-xs text-muted-foreground">
+                        MP3, WAV, or FLAC • Max 50MB per file • 1-3 tracks
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Selected Files */}
+                  {audioFiles.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      <p className="font-semibold text-sm">Selected Files:</p>
+                      {audioFiles.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-secondary p-3 rounded-lg"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <span className="text-green-400">✓</span>
+                            <span className="font-medium">{file.name}</span>
+                            <span className="text-sm text-muted-foreground">
+                              ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(index)}
+                            className="text-red-400 hover:text-red-300"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
-              </div>
-            </div>
-            {/* Rules */}
-            <div className="flex items-center gap-2">
-              <Checkbox id="agree" checked={acceptedRules} onCheckedChange={(v) => setAcceptedRules(!!v)} />
-              <label htmlFor="agree">I accept the rules and terms</label>
-            </div>
 
-            {/* Fees */}
-            <div className="border rounded p-4 space-y-2">
-              <div className="font-medium">Fees</div>
-              {feeBreakdown.list.map((item) => (
-                <div key={item.name} className="flex justify-between text-sm">
-                  <span>{item.name}</span>
-                  <span>${item.amount}</span>
+                {/* Terms Checkbox */}
+                <div className="flex items-start space-x-3">
+                  <Checkbox
+                    id="terms"
+                    checked={acceptedTerms}
+                    onCheckedChange={(checked) => setAcceptedTerms(!!checked)}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-sm text-muted-foreground leading-relaxed cursor-pointer"
+                  >
+                    I agree to the terms and conditions and confirm that I own the rights to the
+                    submitted material.
+                  </label>
                 </div>
-              ))}
-              <div className="flex justify-between font-semibold">
-                <span>Total</span>
-                <span>${feeBreakdown.total}</span>
-              </div>
 
-             {!paymentClientSecret && (
-            <Button
-              type="button"
-              onClick={startPayment}
-              className="bg-yellow-400 text-black font-semibold px-5 py-2 rounded-lg hover:bg-yellow-300"
-            >
-              Initialize Payment
-            </Button>
-          )}
+                {/* Payment Section */}
+                <div className="border-t border-border pt-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold">Submission Fee:</span>
+                    <span className="text-2xl font-bold text-accent">
+                      ${SUBMISSION_FEE.toFixed(2)} + Tax
+                    </span>
+                  </div>
 
-          {paymentClientSecret && !paid && (
-            <PaymentForm
-              clientSecret={paymentClientSecret}
-              onPaid={() => {
-                setPaid(true);
-                toast({
-                  title: "Payment Confirmed",
-                  description: "Your payment was successful. You can now submit your entry.",
-                });
-              }}
+                  {!paymentClientSecret && !paid && (
+                    <Button
+                      type="button"
+                      onClick={startPayment}
+                      className="w-full bg-accent text-accent-foreground font-semibold py-6 text-lg"
+                    >
+                      Proceed to Payment
+                    </Button>
+                  )}
+
+                  {paymentClientSecret && !paid && (
+                    <div className="p-4 bg-secondary rounded-lg">
+                      <PaymentForm
+                        clientSecret={paymentClientSecret}
+                        onPaid={() => {
+                          setPaid(true);
+                          toast({
+                            title: "Payment Confirmed",
+                            description: "Your payment was successful. You can now submit your demo.",
+                          });
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {paid && (
+                    <div className="p-4 bg-green-900/20 border border-green-500 rounded-lg text-center">
+                      <p className="text-green-400 font-semibold">✓ Payment Confirmed</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        You can now submit your demo
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex justify-center pt-4">
+                  <Button
+                    type="submit"
+                    disabled={submitting || !paid}
+                    className="bg-accent text-accent-foreground font-bold px-12 py-6 text-lg rounded-lg shadow-lg hover:shadow-accent/40 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? "Submitting..." : "Submit Demo"}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Next Steps */}
+          <Card className="bg-secondary rounded-xl p-8 mt-8">
+            <h3 className="text-2xl font-semibold mb-4 text-accent">
+              Next Steps:
+            </h3>
+            <ol className="list-decimal list-inside space-y-3 text-muted-foreground">
+              <li>A specialist in our team will be reviewing your content</li>
+              <li>Your song will be queued up until our submissions close for final assessments</li>
+              <li>You will be notified each step on the status of your submission as we review</li>
+              <li>We will select 3 or more artists for the program following year</li>
+            </ol>
+          </Card>
+        </div>
+      </section>
+
+      {/* Footer Image */}
+      <section className="container mx-auto px-4 mt-12">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-2xl overflow-hidden">
+            <img 
+              src={demo2} 
+              alt="Supporting Local Creatives From Every Beat of the World" 
+              className="w-full h-auto object-cover"
             />
-          )}
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-center">
-              <Button
-                type="submit"
-                disabled={submitting || !paid}
-                className="bg-yellow-400 text-black font-bold px-8 py-4 mt-4 rounded-lg shadow-md hover:shadow-yellow-500/40 hover:scale-105 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {submitting ? "Submitting..." : "Submit Entry"}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
