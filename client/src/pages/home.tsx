@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Release, MerchItem } from "@shared/schema";
 import appStoreBadge from "@/assets/app_store.svg";
 import gStoreBadge from "@/assets/g_store.png";
+import youbblerLogo from "@/assets/Youbbler_app.png";
 
 export default function HomePage() {
   const [, setLocation] = useLocation();
@@ -72,8 +73,10 @@ export default function HomePage() {
              <span className="text-accent block">JOIN THE MOVEMENT</span>
            </h1>
            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-             Supporting Local Creatives from Every Beat of the World.
-           </p>
+            Youbble Records is an independent US-based record label empowering local 
+            and diaspora artists through a complete ecosystem of artist development, 
+            global distribution, and music publishing.
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => setLocation("/releases")}
@@ -83,7 +86,7 @@ export default function HomePage() {
               EXPLORE RELEASES
             </Button>
             <Button 
-              onClick={() => setLocation("/demos")}
+              onClick={() => setLocation("/submit-demo")}
               variant="outline"
               className="border-2 border-accent text-accent px-8 py-4 rounded-lg font-heading font-bold hover:bg-accent hover:text-accent-foreground transition-all"
               data-testid="button-submit-demo"
@@ -217,9 +220,16 @@ export default function HomePage() {
         <section className="py-16 bg-background">
          <div className="container mx-auto px-4 grid gap-8 md:grid-cols-2 items-center">
            <div>
-             <h2 className="font-heading font-bold text-3xl mb-4">
-               Find Creatives near You
-             </h2>
+             <div className="flex items-center gap-4 mb-4">
+              <img 
+                src={youbblerLogo} 
+                alt="Youbbler Logo" 
+                className="w-16 h-16 object-contain"
+              />
+              <h2 className="font-heading font-bold text-3xl">
+                Find Creatives near You
+              </h2>
+            </div>
              <p className="text-muted-foreground mb-6">
                Supporting Local Creatives from Every Beat of the World. Discover nearby artists, producers, and creatives through our partner app Youbbler.
              </p>
@@ -227,7 +237,7 @@ export default function HomePage() {
            <div className="flex flex-col sm:flex-row gap-4 items-center">
             {/* App Store official badge */}
             <a
-              href="https://example.com/appstore" // TODO: replace with real App Store link
+              href="https://www.youbble.com" // TODO: replace with real App Store link
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-80"
@@ -241,7 +251,7 @@ export default function HomePage() {
 
             {/* Google Play official badge */}
             <a
-              href="https://example.com/playstore" // TODO: replace with real Google Play link
+              href="https://www.youbble.com" // TODO: replace with real Google Play link
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-80"

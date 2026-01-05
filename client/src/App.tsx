@@ -16,6 +16,7 @@ import EventsPage from "@/pages/events";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import NotFound from "@/pages/not-found";
+import ConnectPage from "@/pages/connect";
 
 
 function Router() {
@@ -40,9 +41,10 @@ function Router() {
         <Route path="/releases" component={ReleasesPage} />
         <Route path="/projects" component={ProjectsPage} />
         <Route path="/demos" component={DemosPage} />
-        <Route path="/services" component={ServicesPage} />
+        {/* <Route path="/services" component={ServicesPage} />
         <Route path="/events" component={EventsPage} />
-        <Route path="/podcasts" component={PodcastsPage} />
+        <Route path="/podcasts" component={PodcastsPage} /> */}
+        <Route path="/connect" component={ConnectPage} />
         <Route component={NotFound} />
       </Switch>
       {showNavAndFooter && <Footer />}

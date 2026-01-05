@@ -1,25 +1,17 @@
 import { Link } from "wouter";
-import { Instagram, Twitter, ExternalLink, Youtube } from "lucide-react";
+import { Instagram, Music2, Twitter, ExternalLink, Youtube } from "lucide-react";
 import logoImage from "../assets/youbble-logo-main.png";
 
 export default function Footer() {
   const quickLinks = [
-    { href: "/about", label: "About Us" },
-    { href: "/releases", label: "Releases" },
-    { href: "/demos", label: "Submit Demo" },
-    { href: "/services", label: "Services" },
-  ];
-
-  const communityLinks = [
-    { href: "/projects", label: "Projects" },
-    { href: "/podcasts", label: "Podcasts" },
-    { href: "/events", label: "Events" },
-    { href: "/merch", label: "Merch Store" },
-  ];
+  { href: "/about", label: "About Us" },
+  { href: "/releases", label: "Releases" },
+  { href: "/submit-demo", label: "Submit Demo" },
+];
 
   const socialLinks = [
     { href: "https://instagram.com/youbblerecords", icon: <Instagram className="w-5 h-5" />, label: "Instagram" },
-    { href: "https://twitter.com/youbblerecords", icon: <Twitter className="w-5 h-5" />, label: "Twitter" },
+    { href: "https://tiktok.com/@youbblerecords", icon: <Music2 className="w-5 h-5" />, label: "TikTok" },
     { href: "https://open.spotify.com/artist/youbblerecords", icon: <ExternalLink className="w-5 h-5" />, label: "Spotify" },
     { href: "https://youtube.com/@youbblerecords", icon: <Youtube className="w-5 h-5" />, label: "YouTube" },
   ];
@@ -27,7 +19,7 @@ export default function Footer() {
   return (
     <footer className="bg-secondary border-t border-border py-12">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-10 h-10 flex items-center justify-center">
@@ -37,10 +29,12 @@ export default function Footer() {
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <span className="font-heading font-bold text-xl">YouBBle Records</span>
+              <span className="font-heading font-bold text-xl">YOUBBLE RECORDS</span>
             </div>
             <p className="text-muted-foreground">
-              Bold music for a bold future. Empowering artists and communities through authentic sound and social impact.
+              Youbble Records is an independent US-based record label empowering local 
+              and diaspora artists through a complete ecosystem of artist development, 
+              global distribution, and music publishing.
             </p>
           </div>
           
@@ -53,23 +47,6 @@ export default function Footer() {
                     href={link.href} 
                     className="hover:text-accent transition-colors"
                     data-testid={`footer-link-${link.label.toLowerCase().replace(' ', '-')}`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-lg mb-4">Community</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              {communityLinks.map((link) => (
-                <li key={link.href}>
-                  <Link 
-                    href={link.href} 
-                    className="hover:text-accent transition-colors"
-                    data-testid={`footer-community-link-${link.label.toLowerCase().replace(' ', '-')}`}
                   >
                     {link.label}
                   </Link>
@@ -93,8 +70,8 @@ export default function Footer() {
               ))}
             </div>
             <p className="text-muted-foreground text-sm">
-              hello@youbblerecords.com<br />
-              +1 (555) 123-4567
+              info@youbblerecords.com<br />
+              (813) YBBL-REC (922-5732)
             </p>
           </div>
         </div>

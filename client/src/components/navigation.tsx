@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import logoImage from "../assets/youbble-logo-main.png";
+import logoImage from "../assets/Youbbler_app.png";
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -13,11 +13,8 @@ export default function Navigation() {
     { href: "/home", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/releases", label: "Releases" },
-    { href: "/projects", label: "Projects" },
-    { href: "/demos", label: "Competition Entry" },
-    { href: "/services", label: "Services" },
-    { href: "/events", label: "Events" },
-    { href: "/podcasts", label: "Podcasts" },
+    { href: "/demos", label: "Submit Your Demo" },
+    { href: "/connect", label: "Connect" },
   ];
 
   const isActive = (href: string) => location === href;
@@ -34,7 +31,7 @@ export default function Navigation() {
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
-            <span className="font-heading font-bold text-xl">YouBBle</span>
+            <span className="font-heading font-bold text-xl">YOUBBLE RECORDS</span>
           </Link>
           
           {/* Desktop Navigation */}

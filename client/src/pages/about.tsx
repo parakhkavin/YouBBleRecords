@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { insertCollaborationRequestSchema, type InsertCollaborationRequest } from "@shared/schema";
+import appStoreBadge from "@/assets/app_store.svg";
+import gStoreBadge from "@/assets/g_store.png";
 
 type ContactFormValues = InsertCollaborationRequest & {
   phone?: string;
@@ -78,7 +80,7 @@ export default function AboutPage() {
             <p className="text-xl text-muted-foreground text-center mb-8">
               YouBBle Records was born from a vision to bridge the gap between underground authenticity and mainstream impact.
             </p>
-            
+
             <div className="grid md:grid-cols-3 gap-8 mb-12">
                <Card className="bg-card p-8">
                  <CardContent className="p-0">
@@ -110,6 +112,144 @@ export default function AboutPage() {
              </div>
           </div>
 
+          <div className="mb-16">
+              <h2 className="font-heading font-bold text-4xl mb-6 text-center text-accent">
+                JOIN OUR MOVEMENT
+              </h2>
+              
+              <div className="space-y-4 text-lg text-muted-foreground">
+                <p>
+                  Whether you're obsessed with making music, constantly creating, love to sing but have no songs 
+                  yet, enjoy collaborating, or simply wish you had a real support team behind you — this is your 
+                  moment.
+                </p>
+                
+                <p>
+                  If you're an emerging creative, a "not-so-sure" bathroom or bedroom performer, AI artist or a 
+                  seasoned artist ready for the next level — and you're looking for a platform to help you produce 
+                  your music, elevate your craft, distribute globally, and publish your work — you're in the right 
+                  place.
+                </p>
+                
+                <p className="font-semibold">
+                  We're scouting artists from local and international diaspora communities who bring:
+                </p>
+                
+                <ul className="list-disc list-inside space-y-2 ml-4">
+                  <li>Creativity</li>
+                  <li>Passion</li>
+                  <li>Hunger</li>
+                  <li>Dedication</li>
+                  <li>A desire to create, grow, and perform</li>
+                  <li>Real talent but no reliable support system yet</li>
+                </ul>
+                
+                <p className="font-semibold text-accent">
+                  If that sounds like you, we want to hear from you.
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-12">
+              <h2 className="font-heading font-bold text-4xl mb-6 text-center text-accent">
+                SUBMIT YOUR DEMO
+              </h2>
+              
+              <p className="text-lg text-muted-foreground text-center mb-8">
+                You may submit your polished Demos or even raw recordings from your phone.
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className="bg-card p-8">
+                  <CardContent className="p-0">
+                    <h3 className="font-heading font-bold text-2xl mb-4 text-pink-400">
+                      Artist & Repertoire
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Talent Scouting, Artist Development, Creative Oversight, Project Management
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-card p-8">
+                  <CardContent className="p-0">
+                    <h3 className="font-heading font-bold text-2xl mb-4 text-green-400">
+                      Music Production
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Coordination and Collaboration of resources for Production of music
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-card p-8">
+                  <CardContent className="p-0">
+                    <h3 className="font-heading font-bold text-2xl mb-4 text-orange-400">
+                      Distribution & Publishing
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Global Online Distribution & Publishing
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="bg-card p-8">
+                  <CardContent className="p-0">
+                    <h3 className="font-heading font-bold text-2xl mb-4 text-yellow-400">
+                      Artist Management
+                    </h3>
+                    <p className="text-muted-foreground">
+                      Artist Placements and Rotations
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+            
+            <div className="mb-12">
+              <h2 className="font-heading font-bold text-4xl mb-6 text-center text-accent">
+                Network with Creatives near you
+              </h2>
+              
+              <p className="text-lg text-muted-foreground text-center mb-6">
+                Download our partner app - "Youbbler" from your app store
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <a
+                  href="https://www.youbble.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition hover:opacity-80"
+                >
+                  <img
+                    src={appStoreBadge}
+                    alt="Download on the App Store"
+                    className="h-12 w-auto"
+                  />
+                </a>
+
+                <a
+                  href="https://www.youbble.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition hover:opacity-80"
+                >
+                  <img
+                    src={gStoreBadge}
+                    alt="Get it on Google Play"
+                    className="h-12 w-auto"
+                  />
+                </a>
+              </div>
+              
+              <p className="text-center mt-4 text-accent font-semibold">
+                <a href="https://www.youbble.com" target="_blank" rel="noreferrer" className="hover:underline">
+                  www.youbble.com
+                </a>
+              </p>
+            </div>
+
           {/* Competition Rules Section */}
             <Card className="bg-secondary rounded-xl p-8 md:p-12 mt-8 mb-8">
               <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Competition Rules</h2>
@@ -134,7 +274,7 @@ export default function AboutPage() {
             <Card className="bg-secondary rounded-xl p-8 md:p-12">
 
             <CardContent className="p-0">
-              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Contact Us</h2>
+              <h2 className="font-heading font-bold text-3xl mb-6 text-center">Connect With Us</h2>
               <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
                 Whether you are a creative, a brand, an event organizer, an investor, or a partner, this is the best way to reach YouBBle Records.
               </p>
